@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit Cold Email · Konverti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Barlow:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --black: #0A0A0A;
+  --white: #FAFAFA;
+  --green: #1BDD7F;
+  --green-dim: rgba(27,221,127,0.12);
+  --green-mid: rgba(27,221,127,0.35);
+  --gray-100: #F2F2F2;
+  --gray-200: #E5E5E5;
+  --gray-400: #999;
+  --gray-600: #555;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Barlow', sans-serif;
+  --mono: 'Bebas Neue', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: var(--sans);
+  min-height: 100vh;
+  cursor: none;
+  overflow-x: hidden;
+}
+
+/* ── CURSOR ── */
+#cursor {
+  width: 12px; height: 12px;
+  background: var(--green);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s, width 0.25s, height 0.25s, background 0.25s;
+  mix-blend-mode: normal;
+}
+#cursor.hover {
+  width: 40px; height: 40px;
+  background: var(--green);
+  opacity: 0.3;
+}
+#cursor-trail {
+  width: 36px; height: 36px;
+  border: 1.5px solid var(--green);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: left 0.12s ease-out, top 0.12s ease-out, width 0.3s, height 0.3s;
+  opacity: 0.5;
+}
+
+/* ── SCREENS ── */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── NAV ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 48px;
+  mix-blend-mode: multiply;
+}
+.nav-logo {
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--black);
+  text-decoration: none;
+  display: flex; align-items: center; gap: 6px;
+}
+.nav-logo-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; }
+.nav-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  padding: 6px 14px;
+  border-radius: 100px;
+}
+
+/* ────────────────────────
+   SCREEN 0 · LANDING — 100K REDESIGN
+──────────────────────── */
+#screen-0 {
+  justify-content: stretch;
+  align-items: stretch;
+  padding: 0;
+  height: 100vh;
+  grid-template-columns: 1fr 400px;
+  position: relative;
+  overflow: hidden;
+}
+#screen-0.active { display: grid; }
+
+/* ── LEFT HERO ── */
+.hero-left {
+  padding: 80px 72px 60px 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--white);
+  height: 100vh;
+}
+
+/* Dot grid background */
+.hero-left::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+  mask-image: radial-gradient(ellipse 80% 80% at 70% 50%, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 70% 50%, black 0%, transparent 70%);
+}
+
+/* Geometric circle accent */
+.hero-circle {
+  position: absolute;
+  right: -180px; top: 50%;
+  transform: translateY(-50%);
+  width: 560px; height: 560px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.06);
+  pointer-events: none; z-index: 0;
+}
+.hero-circle::before {
+  content: '';
+  position: absolute;
+  inset: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+.hero-left-content {
+  position: relative; z-index: 1;
+  max-width: 620px;
+  padding: 0;
+}
+
+/* Top bar — thin green rule full width */
+.hero-top-rule {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--green) 0%, var(--green) 60%, transparent 100%);
+  z-index: 10;
+}
+
+.hero-eyebrow-row {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 48px;
+  opacity: 0; animation: revealUp 0.6s 0.1s ease forwards;
+}
+.hero-eyebrow-line { width: 28px; height: 1.5px; background: var(--green); flex-shrink: 0; }
+.hero-eyebrow-text {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--green);
+}
+.hero-eyebrow-sep { width: 3px; height: 3px; background: var(--gray-200); border-radius: 50%; }
+.hero-eyebrow-sub {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gray-400);
+}
+
+h1.hero-title {
+  font-size: clamp(52px, 6vw, 88px);
+  font-weight: 800;
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  margin-bottom: 0;
+  opacity: 0; animation: revealUp 0.6s 0.2s ease forwards;
+}
+h1.hero-title .line-normal {
+  font-family: var(--sans);
+  display: block; color: var(--black);
+}
+h1.hero-title .line-serif {
+  font-family: var(--serif);
+  font-style: italic; font-weight: 700;
+  display: block; color: var(--black);
+  padding-left: 6px;
+}
+h1.hero-title .line-accent {
+  font-family: var(--sans);
+  font-weight: 800;
+  display: block; color: var(--black);
+}
+.hero-title-underline {
+  position: relative; display: inline-block;
+}
+.hero-title-underline::after {
+  content: '';
+  position: absolute; left: 0; bottom: 3px;
+  width: 100%; height: 5px;
+  background: var(--green);
+  transform: scaleX(0); transform-origin: left;
+  animation: scaleIn 0.5s 0.8s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+@keyframes scaleIn { to { transform: scaleX(1); } }
+
+/* Marquee ticker */
+.hero-ticker {
+  overflow: hidden;
+  margin: 24px -64px 24px -64px;
+  border-top: 1px solid var(--gray-200);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 10px 0;
+  opacity: 0; animation: revealUp 0.5s 0.35s ease forwards;
+}
+.hero-ticker-track {
+  display: flex; gap: 0;
+  white-space: nowrap;
+  animation: tickerScroll 22s linear infinite;
+}
+.hero-ticker-track:hover { animation-play-state: paused; }
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.hero-ticker-item {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 0 32px;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--gray-400);
+  flex-shrink: 0;
+}
+.hero-ticker-item strong { color: var(--black); font-weight: 700; }
+.hero-ticker-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--green); flex-shrink: 0;
+}
+
+.hero-sub {
+  font-size: 16px; font-weight: 400;
+  line-height: 1.72; color: var(--gray-600);
+  max-width: 460px;
+  margin-bottom: 28px;
+  opacity: 0; animation: revealUp 0.5s 0.4s ease forwards;
+}
+
+.hero-cta-row {
+  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  opacity: 0; animation: revealUp 0.5s 0.5s ease forwards;
+  margin-bottom: 36px;
+}
+
+/* PRIMARY CTA — magnetic fill effect */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 14px;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--sans);
+  font-size: 14px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 18px 36px;
+  border-radius: 0;
+  border: none; cursor: none;
+  text-decoration: none;
+  position: relative; overflow: hidden;
+  transition: color 0.35s;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--green);
+  transform: translateX(-101%);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  z-index: 0;
+}
+.btn-primary:hover::before { transform: translateX(0); }
+.btn-primary:hover { color: var(--black); }
+.btn-primary span, .btn-primary svg { position: relative; z-index: 1; }
+.btn-primary svg { width: 16px; height: 16px; transition: transform 0.25s; }
+.btn-primary:hover svg { transform: translateX(5px); }
+
+/* GHOST LINK */
+.btn-ghost {
+  font-size: 13px; font-weight: 500;
+  color: var(--gray-400);
+  background: none; border: none; cursor: none;
+  letter-spacing: 0.02em;
+  display: flex; align-items: center; gap: 6px;
+  transition: color 0.18s;
+  padding: 0;
+}
+.btn-ghost::before {
+  content: '—';
+  font-size: 11px;
+  color: var(--green);
+}
+.btn-ghost:hover { color: var(--black); }
+
+/* STATS — full width bordered */
+.hero-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--gray-200);
+  opacity: 0; animation: revealUp 0.5s 0.6s ease forwards;
+}
+.hero-stat {
+  padding: 20px 24px;
+  border-right: 1px solid var(--gray-200);
+  position: relative;
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--green);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s;
+}
+.hero-stat:hover::before { transform: scaleX(1); }
+.hero-stat-num {
+  font-family: var(--mono);
+  font-size: 36px; line-height: 1;
+  color: var(--black); margin-bottom: 6px;
+}
+.hero-stat-num span { color: var(--green); }
+.hero-stat-label { font-size: 11px; color: var(--gray-400); line-height: 1.5; font-weight: 400; }
+
+/* ── RIGHT PANEL ── */
+.hero-right {
+  background: #0A0A0A;
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+  border-left: 1px solid rgba(27,221,127,0.15);
+  height: 100vh;
+}
+
+/* Subtle green glow on left edge */
+.hero-right::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--green), transparent);
+  opacity: 0.4;
+}
+
+.hero-right-label {
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.hero-right-label-text {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+}
+.hero-right-live {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--green);
+}
+.hero-right-live-dot {
+  width: 5px; height: 5px;
+  background: var(--green); border-radius: 50%;
+  animation: pulse 1.8s infinite;
+  box-shadow: 0 0 6px var(--green);
+}
+
+/* Alert feed */
+.alert-feed {
+  flex: 1; overflow: hidden; position: relative;
+}
+.alert-feed::before, .alert-feed::after {
+  content: '';
+  position: absolute; left: 0; right: 0; z-index: 2;
+  height: 72px; pointer-events: none;
+}
+.alert-feed::before { top: 0; background: linear-gradient(to bottom, #0A0A0A, transparent); }
+.alert-feed::after { bottom: 0; background: linear-gradient(to top, #0A0A0A, transparent); }
+
+.alert-track {
+  display: flex; flex-direction: column;
+  animation: scrollUp 32s linear infinite;
+}
+.alert-track:hover { animation-play-state: paused; }
+@keyframes scrollUp {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+.alert-item {
+  padding: 13px 24px 13px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex; align-items: flex-start; gap: 12px;
+  border-left: 2px solid transparent;
+  transition: border-color 0.2s, background 0.2s;
+}
+.alert-item:hover { background: rgba(255,255,255,0.02); }
+.alert-item.r { border-left-color: rgba(220,60,60,0.5); }
+.alert-item.y { border-left-color: rgba(212,161,13,0.5); }
+.alert-item.g { border-left-color: rgba(27,221,127,0.4); }
+
+.alert-icon {
+  width: 22px; height: 22px; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800;
+  flex-shrink: 0; margin-top: 1px;
+}
+.alert-icon.r { background: rgba(220,60,60,0.15); color: #E05; }
+.alert-icon.y { background: rgba(212,161,13,0.12); color: #D4A10D; }
+.alert-icon.g { background: rgba(27,221,127,0.1); color: var(--green); }
+
+.alert-body { min-width: 0; }
+.alert-company {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(255,255,255,0.25); margin-bottom: 3px;
+}
+.alert-msg {
+  font-size: 12px; font-weight: 400;
+  color: rgba(255,255,255,0.65); line-height: 1.45;
+}
+.alert-msg strong { color: rgba(255,255,255,0.9); font-weight: 600; }
+.alert-time {
+  font-size: 9px; color: rgba(255,255,255,0.18);
+  margin-top: 4px; font-style: italic;
+}
+
+/* Bottom score panel */
+.hero-right-score {
+  flex-shrink: 0; padding: 20px 24px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  background: rgba(27,221,127,0.03);
+}
+.hero-right-score-label {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,255,255,0.2); margin-bottom: 14px;
+}
+.score-bars { display: flex; flex-direction: column; gap: 9px; }
+.score-bar-row { display: flex; align-items: center; gap: 10px; }
+.score-bar-name { font-size: 10px; color: rgba(255,255,255,0.35); width: 88px; flex-shrink: 0; }
+.score-bar-track { flex: 1; height: 2px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+.score-bar-fill { height: 100%; border-radius: 2px; transition: width 1.5s ease; }
+.score-bar-val {
+  font-family: var(--mono); font-size: 12px;
+  color: rgba(255,255,255,0.4); width: 24px; text-align: right;
+}
+
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ════════════════════════════════
+   RESPONSIVE — MOBILE FIRST
+════════════════════════════════ */
+
+/* ── TABLET (≤1000px) ── */
+@media (max-width: 1000px) {
+  /* Hero */
+  #screen-0 { grid-template-columns: 1fr; height: auto; }
+  .hero-right { display: none; }
+  .hero-left {
+    padding: 100px 40px 56px;
+    height: auto;
+    min-height: 100vh;
+    justify-content: center;
+  }
+  .hero-ticker { margin-left: -40px; margin-right: -40px; }
+  .hero-circle { display: none; }
+
+  /* Questions */
+  .q-layout { grid-template-columns: 1fr; }
+  .q-left { position: relative; height: auto; min-height: auto; padding: 96px 40px 36px; }
+  .q-right { padding: 36px 40px 80px; }
+
+  /* Results */
+  .res-hero-inner { grid-template-columns: 1fr; gap: 32px; }
+  .res-body { grid-template-columns: 1fr; }
+  .res-cta { flex-direction: column; }
+
+  /* Nav */
+  .nav { padding: 18px 24px; }
+  .live-score { display: none; }
+}
+
+/* ── MOBILE (≤600px) ── */
+@media (max-width: 600px) {
+
+  /* Cursor désactivé sur touch */
+  #cursor, #cursor-trail { display: none; }
+  * { cursor: auto !important; }
+
+  /* Nav */
+  .nav { padding: 16px 20px; }
+  .nav-tag { display: none; }
+
+  /* Hero */
+  .hero-left { padding: 88px 24px 48px; }
+  .hero-ticker { margin-left: -24px; margin-right: -24px; }
+  .hero-eyebrow-row { margin-bottom: 20px; }
+  h1.hero-title { font-size: clamp(40px, 11vw, 64px); }
+  .hero-sub { font-size: 15px; margin-bottom: 24px; }
+  .hero-cta-row { flex-direction: column; align-items: flex-start; gap: 14px; margin-bottom: 28px; }
+  .btn-primary { width: 100%; justify-content: center; padding: 16px 24px; }
+  .btn-ghost { font-size: 12px; }
+
+  /* Stats mobile — 2 colonnes */
+  .hero-stats { grid-template-columns: 1fr 1fr; }
+  .hero-stat { padding: 16px; }
+  .hero-stat:nth-child(3) {
+    grid-column: 1 / -1;
+    border-right: none;
+    border-top: 1px solid var(--gray-200);
+  }
+  .hero-stat-num { font-size: 28px; }
+  .hero-stat-label { font-size: 10px; }
+
+  /* Questions */
+  .q-left { padding: 84px 24px 28px; min-height: auto; }
+  .q-left-bg-num { font-size: 140px; bottom: -20px; left: -10px; opacity: 0.06; }
+  .q-cat { font-size: 9px; margin-bottom: 10px; }
+  .q-question { font-size: clamp(18px, 5vw, 26px); }
+  .q-hint { font-size: 12px; }
+  .btn-back-left { padding: 9px 14px; font-size: 12px; }
+
+  .q-right { padding: 24px 24px 80px; }
+  .options-wrap { gap: 10px; }
+  .opt-btn { padding: 14px 16px; }
+  .opt-key { width: 28px; height: 28px; font-size: 11px; }
+  .opt-label { font-size: 13px; }
+  .opt-score { font-size: 9px; }
+
+  .q-nav-row { padding: 16px 24px; }
+  .btn-next { padding: 14px 24px; font-size: 13px; }
+
+  /* Tension dots — repositionnés */
+  .tension-dots { right: 12px; gap: 5px; }
+  .tension-dot { width: 5px; height: 5px; }
+
+  /* Gate — formulaire email */
+  #screen-2 { padding: 100px 24px 60px; }
+  .gate-score-preview { flex-direction: column; text-align: center; padding: 20px; gap: 12px; }
+  .gate-score-blur { font-size: 52px; }
+  .gate-score-text { font-size: 13px; }
+  .gate-title { font-size: clamp(26px, 7vw, 36px); }
+  .gate-sub { font-size: 14px; margin-bottom: 24px; }
+  .form-row { grid-template-columns: 1fr; }
+  .form-input { padding: 13px 16px; font-size: 14px; }
+  .btn-submit { padding: 16px 24px; font-size: 14px; }
+
+  /* Loading */
+  #screen-3 { padding: 32px 24px; min-height: 100vh; }
+  .load-steps { min-width: auto; width: 100%; }
+  .load-step-text { font-size: 13px; }
+
+  /* Results */
+  #screen-4 { padding-top: 80px; }
+  .res-hero { padding: 48px 24px; }
+  .res-hero-score-num { font-size: clamp(64px, 18vw, 120px); }
+  .res-hero-label { font-size: 12px; }
+  .res-hero-inner { gap: 24px; }
+  .res-section { padding: 32px 24px; }
+  .res-section-title { font-size: 18px; }
+  .diag-cards { gap: 12px; }
+  .diag-card { padding: 16px; }
+  .diag-card-title { font-size: 13px; }
+  .diag-card-desc { font-size: 12px; }
+  .res-cta { padding: 32px 24px; gap: 12px; }
+  .res-cta-title { font-size: clamp(22px, 6vw, 32px); }
+  .btn-primary { font-size: 13px; padding: 16px 24px; }
+  .res-guarantee { font-size: 12px; }
+}
+
+/* ────────────────────────
+   SCREEN 1 · QUESTIONS
+──────────────────────── */
+#screen-1 { background: var(--white); position: relative; }
+
+.q-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+/* LEFT PANEL */
+.q-left {
+  background: var(--black);
+  padding: 120px 56px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: sticky; top: 0; height: 100vh;
+  overflow: hidden;
+}
+
+.q-left-bg-num {
+  position: absolute;
+  bottom: -60px; left: -20px;
+  font-family: var(--mono);
+  font-size: 260px;
+  line-height: 1;
+  color: rgba(255,255,255,0.04);
+  pointer-events: none;
+  user-select: none;
+  transition: all 0.5s ease;
+}
+
+.q-cat {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 20px;
+}
+.q-cat::before { content:''; width:20px; height:1px; background:var(--green); }
+
+.q-question {
+  font-family: var(--sans);
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  flex: 1;
+  display: flex; align-items: center;
+}
+
+.q-hint {
+  font-size: 14px;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.6;
+  font-weight: 300;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+/* PROGRESS */
+.q-progress {
+  margin-top: 48px;
+}
+.q-progress-top {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.q-progress-label { font-size: 12px; color: rgba(255,255,255,0.3); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+.q-progress-count { font-family: var(--mono); font-size: 22px; color: var(--white); letter-spacing: 0.04em; }
+.q-progress-bar { height: 2px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+.q-progress-fill { height: 100%; background: var(--green); border-radius: 10px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+/* RIGHT PANEL */
+.q-right {
+  padding: 120px 56px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.options-wrap {
+  display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: 40px;
+}
+
+.option {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 20px 24px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 6px;
+  cursor: none;
+  transition: border-color 0.18s, background 0.18s, transform 0.18s;
+  position: relative;
+  overflow: hidden;
+  background: var(--white);
+}
+.option::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--green-dim);
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+.option:hover { border-color: var(--green); transform: translateX(4px); }
+.option:hover::after { opacity: 1; }
+.option.selected { border-color: var(--green); background: var(--green-dim); transform: translateX(4px); }
+.option.selected::after { opacity: 0; }
+
+.opt-key {
+  flex-shrink: 0;
+  width: 30px; height: 30px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--gray-400);
+  transition: all 0.18s;
+  position: relative; z-index: 1;
+  flex-shrink: 0;
+}
+.option.selected .opt-key, .option:hover .opt-key {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--black);
+}
+
+.opt-body { position: relative; z-index: 1; }
+.opt-label { font-size: 15px; font-weight: 500; color: var(--black); line-height: 1.4; }
+.opt-sub { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+.option.selected .opt-sub { color: var(--gray-600); }
+
+/* NAV BTNS */
+.q-nav-row {
+  display: flex; align-items: center; gap: 12px;
+}
+.btn-next {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 14px 28px;
+  border-radius: 4px;
+  border: none;
+  cursor: none;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+.btn-next:disabled { opacity: 0.25; }
+.btn-next:not(:disabled):hover {
+  background: var(--green);
+  color: var(--black);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(27,221,127,0.25);
+}
+.btn-next svg { width: 15px; height: 15px; }
+
+.btn-back {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-400);
+  background: none;
+  border: none;
+  cursor: none;
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 0;
+  transition: color 0.18s;
+}
+.btn-back:hover { color: var(--black); }
+.btn-back svg { width: 14px; height: 14px; }
+
+/* BACK BUTTON — left panel (white on black) */
+.btn-back-left {
+  display: none;
+  align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  padding: 11px 18px;
+  font-family: var(--sans);
+  font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,0.5);
+  cursor: none;
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
+  width: fit-content;
+  margin-bottom: 24px;
+}
+.btn-back-left:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.25);
+  color: var(--white);
+}
+.btn-back-left svg { width: 13px; height: 13px; }
+
+/* TENSION DOTS — réponses enregistrées, pas de score affiché */
+.tension-dots {
+  position: fixed;
+  right: 28px; top: 50%;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.tension-dots.show { opacity: 1; }
+.tension-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gray-200);
+  background: transparent;
+  transition: background 0.3s, border-color 0.3s, transform 0.3s;
+}
+.tension-dot.answered {
+  background: var(--green);
+  border-color: var(--green);
+  transform: scale(1.2);
+}
+.tension-dot.current {
+  border-color: var(--black);
+  animation: dotpulse 1.4s infinite;
+}
+@keyframes dotpulse {
+  0%,100%{ transform:scale(1); opacity:1; }
+  50%{ transform:scale(1.5); opacity:0.6; }
+}
+
+/* ────────────────────────
+   SCREEN 2 · GATE
+──────────────────────── */
+#screen-2 {
+  justify-content: center;
+  align-items: center;
+  padding: 140px 48px 80px;
+  background: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.gate-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(27,221,127,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.gate-inner { max-width: 560px; width: 100%; position: relative; z-index: 2; }
+
+.gate-score-preview {
+  display: flex; align-items: center; gap: 20px;
+  background: var(--black);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-bottom: 48px;
+}
+.gate-score-blur {
+  font-family: var(--mono);
+  font-size: 72px;
+  line-height: 1;
+  color: var(--green);
+  filter: blur(10px);
+  user-select: none;
+  flex-shrink: 0;
+}
+.gate-score-text { color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.6; }
+.gate-score-text strong { display: block; color: var(--white); font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+
+.gate-title {
+  font-family: var(--sans);
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.gate-title em { font-family: var(--serif); font-style: italic; font-weight: 700; }
+
+.gate-sub { font-size: 16px; color: var(--gray-600); line-height: 1.65; margin-bottom: 36px; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.form-group { margin-bottom: 12px; }
+.form-label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray-400); margin-bottom: 8px; }
+.form-input {
+  width: 100%;
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 6px;
+  padding: 14px 18px;
+  font-family: var(--sans);
+  font-size: 15px;
+  color: var(--black);
+  outline: none;
+  transition: border-color 0.18s;
+}
+.form-input:focus { border-color: var(--green); }
+.form-input::placeholder { color: var(--gray-400); }
+
+.error-msg { color: #E55; font-size: 12px; margin-top: 6px; display: none; }
+.success-banner { background: var(--green-dim); border: 1px solid var(--green-mid); border-radius: 6px; padding: 12px 18px; font-size: 14px; color: var(--black); margin-bottom: 16px; display: none; }
+
+.btn-submit {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 18px 32px;
+  border-radius: 6px;
+  border: none;
+  cursor: none;
+  margin-top: 8px;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.btn-submit:hover {
+  background: var(--green);
+  color: var(--black);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(27,221,127,0.3);
+}
+.form-note { font-size: 12px; color: var(--gray-400); margin-top: 12px; line-height: 1.5; text-align: center; }
+
+/* ────────────────────────
+   SCREEN 3 · LOADING
+──────────────────────── */
+#screen-3 {
+  background: var(--black);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.load-score-count {
+  font-family: var(--mono);
+  font-size: min(35vw, 300px);
+  line-height: 1;
+  color: var(--white);
+  opacity: 0.06;
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  user-select: none;
+  pointer-events: none;
+  transition: opacity 1s;
+  white-space: nowrap;
+}
+.load-score-count.reveal { opacity: 1; color: var(--green); }
+
+.load-inner { position: relative; z-index: 2; }
+.load-steps { display: flex; flex-direction: column; gap: 12px; text-align: left; min-width: 260px; }
+.load-step { display: flex; align-items: center; gap: 14px; opacity: 0; transform: translateY(8px); transition: opacity 0.4s, transform 0.4s; }
+.load-step.show { opacity: 1; transform: none; }
+.load-step-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  flex-shrink: 0;
+  transition: background 0.4s, box-shadow 0.4s;
+}
+.load-step.show .load-step-dot { background: var(--green); box-shadow: 0 0 12px var(--green); }
+.load-step-text { font-size: 14px; color: rgba(255,255,255,0.5); font-weight: 400; }
+.load-step.show .load-step-text { color: var(--white); }
+
+/* ────────────────────────
+   SCREEN 4 · RESULTS
+──────────────────────── */
+#screen-4 { background: var(--white); padding-top: 100px; }
+
+/* RESULTS HERO */
+.res-hero {
+  background: var(--black);
+  padding: 80px 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.res-hero-bg {
+  position: absolute; right: 48px; top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--mono);
+  font-size: 360px;
+  line-height: 1;
+  color: rgba(255,255,255,0.04);
+  pointer-events: none;
+  user-select: none;
+}
+
+.res-hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 64px;
+  align-items: center;
+  position: relative; z-index: 2;
+}
+
+/* SCORE RING */
+.score-ring-wrap { position: relative; width: 160px; height: 160px; flex-shrink: 0; }
+.score-ring-wrap svg { transform: rotate(-90deg); }
+.score-ring-bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 6; }
+.score-ring-fill {
+  fill: none; stroke-width: 6; stroke-linecap: round;
+  stroke-dasharray: 452;
+  stroke-dashoffset: 452;
+  transition: stroke-dashoffset 1.8s cubic-bezier(0.4,0,0.2,1);
+}
+.score-num-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.score-num-big {
+  font-family: var(--mono);
+  font-size: 52px;
+  line-height: 1;
+  color: var(--white);
+}
+.score-num-denom { font-size: 12px; color: rgba(255,255,255,0.3); }
+
+.res-verdict { color: var(--white); }
+.res-verdict-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.res-verdict-eyebrow::before { content:''; width:20px; height:1px; background:var(--green); }
+.res-verdict-title {
+  font-family: var(--sans);
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.res-verdict-title em { font-family: var(--serif); font-style: italic; font-weight: 700; }
+.res-verdict-body { font-size: 16px; color: rgba(255,255,255,0.55); line-height: 1.65; max-width: 480px; font-weight: 300; }
+
+/* DIAGNOSTIC */
+.res-body {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 64px 48px 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+
+.diag-section-title {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.diag-card {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 18px 20px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: border-color 0.2s, transform 0.2s;
+  background: var(--white);
+}
+.diag-card:hover { border-color: var(--black); transform: translateY(-2px); }
+
+.diag-card-icon {
+  width: 34px; height: 34px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0;
+  font-weight: 700;
+}
+.diag-card-icon.red { background: rgba(220,60,60,0.1); color: #DC3C3C; }
+.diag-card-icon.yellow { background: rgba(240,185,11,0.1); color: #D4A10D; }
+.diag-card-icon.green { background: var(--green-dim); color: var(--green); }
+
+.diag-card-name { font-size: 14px; font-weight: 600; color: var(--black); margin-bottom: 3px; }
+.diag-card-desc { font-size: 13px; color: var(--gray-600); line-height: 1.5; font-weight: 300; }
+.diag-card-bar { margin-top: 8px; height: 2px; background: var(--gray-200); border-radius: 10px; overflow: hidden; }
+.diag-card-bar-fill { height: 100%; border-radius: 10px; transition: width 1s ease 0.5s; }
+
+/* CTA BLOCK */
+.res-cta {
+  grid-column: 1 / -1;
+  background: var(--black);
+  border-radius: 12px;
+  padding: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.res-cta::before {
+  content: '';
+  position: absolute; top: -100px; left: -100px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(27,221,127,0.12), transparent 70%);
+  pointer-events: none;
+}
+.res-cta-text { position: relative; z-index: 1; }
+.res-cta-title {
+  font-family: var(--sans);
+  font-size: clamp(26px, 3vw, 38px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+.res-cta-title em { font-family: var(--serif); font-style: italic; }
+.res-cta-sub { font-size: 15px; color: rgba(255,255,255,0.5); line-height: 1.65; max-width: 440px; font-weight: 300; }
+.res-cta-action { flex-shrink: 0; position: relative; z-index: 1; }
+.res-cta-price { font-size: 12px; color: rgba(255,255,255,0.4); text-align: center; margin-top: 12px; letter-spacing: 0.04em; }
+
+/* ── TRANSITIONS ── */
+.slide-in { animation: slideIn 0.4s cubic-bezier(0.4,0,0.2,1) both; }
+.slide-out { animation: slideOut 0.3s cubic-bezier(0.4,0,0.2,1) both; }
+@keyframes slideIn { from{opacity:0;transform:translateX(32px)} to{opacity:1;transform:translateX(0)} }
+@keyframes slideOut { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(-32px)} }
+
+/* ── RESPONSIVE ── */
+/* voir media queries en haut du CSS */
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+
+<!-- TENSION DOTS -->
+<div class="tension-dots" id="tension-dots"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="https://konverti.co" class="nav-logo"><span class="nav-logo-dot"></span>Konverti</a>
+  <span class="nav-tag">Audit gratuit</span>
+</nav>
+
+<!-- ═══════════════ SCREEN 0 ═══════════════ -->
+<div class="screen active" id="screen-0">
+
+  <!-- LEFT -->
+  <div class="hero-left">
+    <div class="hero-top-rule"></div>
+    <div class="hero-circle"></div>
+
+    <div class="hero-left-content">
+      <div class="hero-eyebrow-row">
+        <div class="hero-eyebrow-line"></div>
+        <span class="hero-eyebrow-text">Audit Cold Email</span>
+        <div class="hero-eyebrow-sep"></div>
+        <span class="hero-eyebrow-sub">Gratuit · 2 min</span>
+      </div>
+
+      <h1 class="hero-title">
+        <span class="line-normal">Pendant que</span>
+        <span class="line-serif">vous lisez ça,</span>
+        <span class="line-accent">vos concurrents <span class="hero-title-underline">envoient.</span></span>
+      </h1>
+
+      <!-- TICKER -->
+      <div class="hero-ticker">
+        <div class="hero-ticker-track" id="hero-ticker-track">
+          <span class="hero-ticker-item"><span class="hero-ticker-dot"></span>Sans SPF · <strong>Gmail rejette en masse</strong></span>
+          <span class="hero-ticker-item"><span class="hero-ticker-dot"></span><strong>21,3%</strong> des emails B2B n'arrivent jamais</span>
+          <span class="hero-ticker-item"><span class="hero-ticker-dot"></span>Sans warm-up · <strong>60% en spam dès J+1</strong></span>
+          <span class="hero-ticker-item"><span class="hero-ticker-dot"></span><strong>80%</strong> des réponses après la 3e relance</span>
+          <span class="hero-ticker-item"><span class="hero-ticker-dot"></span>Domaine principal · <strong>risque de blacklistage total</strong></span>
+          <span class="hero-ticker-item"><span class="hero-ticker-dot"></span><strong>95%+</strong> délivrabilité avec la bonne infra</span>
+          <!-- Duplicate for seamless loop -->
+          <span class="hero-ticker-item"><span class="hero-ticker-dot"></span>Sans SPF · <strong>Gmail rejette en masse</strong></span>
+          <span class="hero-ticker-item"><span class="hero-ticker-dot"></span><strong>21,3%</strong> des emails B2B n'arrivent jamais</span>
+          <span class="hero-ticker-item"><span class="hero-ticker-dot"></span>Sans warm-up · <strong>60% en spam dès J+1</strong></span>
+          <span class="hero-ticker-item"><span class="hero-ticker-dot"></span><strong>80%</strong> des réponses après la 3e relance</span>
+          <span class="hero-ticker-item"><span class="hero-ticker-dot"></span>Domaine principal · <strong>risque de blacklistage total</strong></span>
+          <span class="hero-ticker-item"><span class="hero-ticker-dot"></span><strong>95%+</strong> délivrabilité avec la bonne infra</span>
+        </div>
+      </div>
+
+      <p class="hero-sub">La plupart des boîtes B2B pensent prospecter par email. En réalité, leurs messages atterrissent en spam depuis des semaines sans qu'elles le sachent. 11 questions pour savoir où vous en êtes vraiment.</p>
+
+      <div class="hero-cta-row">
+        <button class="btn-primary" onclick="startAudit()">
+          <span>Radiographier mon setup</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <button class="btn-ghost" onclick="startAudit()">Sans inscription · Résultats immédiats</button>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num"><span>87</span>%</div>
+          <div class="hero-stat-label">des setups ont au moins une faille critique</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">21<span>j</span></div>
+          <div class="hero-stat-label">pour une infra qui délivre vraiment</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">J+<span>45</span></div>
+          <div class="hero-stat-label">premières conversations garanties</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT — Alert feed -->
+  <div class="hero-right">
+    <div class="hero-right-label">
+      <span class="hero-right-label-text">Faits sectoriels</span>
+      <span class="hero-right-live"><span class="hero-right-live-dot"></span>Données 2024</span>
+    </div>
+    <div class="alert-feed">
+      <div class="alert-track" id="alert-track"></div>
+    </div>
+    <div class="hero-right-score">
+      <div class="hero-right-score-label">Score moyen observé</div>
+      <div class="score-bars">
+        <div class="score-bar-row"><span class="score-bar-name">Infrastructure</span><div class="score-bar-track"><div class="score-bar-fill" style="width:38%;background:#DC3C3C"></div></div><span class="score-bar-val">38</span></div>
+        <div class="score-bar-row"><span class="score-bar-name">Délivrabilité</span><div class="score-bar-track"><div class="score-bar-fill" style="width:44%;background:#D4A10D"></div></div><span class="score-bar-val">44</span></div>
+        <div class="score-bar-row"><span class="score-bar-name">Copywriting</span><div class="score-bar-track"><div class="score-bar-fill" style="width:52%;background:#D4A10D"></div></div><span class="score-bar-val">52</span></div>
+        <div class="score-bar-row"><span class="score-bar-name">Séquences</span><div class="score-bar-track"><div class="score-bar-fill" style="width:31%;background:#DC3C3C"></div></div><span class="score-bar-val">31</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SCREEN 1 ═══════════════ -->
+<div class="screen" id="screen-1">
+  <div class="q-layout">
+    <!-- LEFT -->
+    <div class="q-left">
+      <div class="q-left-bg-num" id="q-bg-num">01</div>
+      <div>
+        <div class="q-cat" id="q-cat">Infrastructure</div>
+        <div class="q-question" id="q-text">Chargement…</div>
+        <div class="q-hint" id="q-hint"></div>
+      </div>
+      <!-- BACK BUTTON on left panel -->
+      <button class="btn-back-left" id="btn-back" onclick="prevQ()" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Question précédente
+      </button>
+      <div class="q-progress">
+        <div class="q-progress-top">
+          <span class="q-progress-label">Progression</span>
+          <span class="q-progress-count" id="q-count">01 / 11</span>
+        </div>
+        <div class="q-progress-bar"><div class="q-progress-fill" id="q-prog-fill" style="width:9%"></div></div>
+      </div>
+    </div>
+    <!-- RIGHT -->
+    <div class="q-right">
+      <div class="options-wrap" id="options-wrap"></div>
+      <div class="q-nav-row">
+        <button class="btn-next" id="btn-next" onclick="nextQ()" disabled>
+          Continuer
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SCREEN 2 ═══════════════ -->
+<div class="screen" id="screen-2">
+  <div class="gate-bg"></div>
+  <div class="gate-inner">
+    <div class="gate-score-preview">
+      <div class="gate-score-blur" id="gate-score-blur">??</div>
+      <div class="gate-score-text">
+        <strong>Votre score est prêt.</strong>
+        Renseignez votre email pour révéler votre diagnostic complet et les priorités d'action.
+      </div>
+    </div>
+    <div class="success-banner" id="success-banner">✓ Parfait, génération du diagnostic en cours…</div>
+    <h2 class="gate-title">Où envoyer<br><em>vos résultats ?</em></h2>
+    <p class="gate-sub">Votre diagnostic personnalisé + les recommandations prioritaires. En clair, sans jargon.</p>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Prénom</label>
+        <input type="text" class="form-input" id="input-name" placeholder="Votre prénom">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Entreprise</label>
+        <input type="text" class="form-input" id="input-company" placeholder="Nom de l'entreprise">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email professionnel</label>
+      <input type="email" class="form-input" id="input-email" placeholder="vous@entreprise.com">
+      <div class="error-msg" id="email-error">Entrez un email valide.</div>
+    </div>
+    <button class="btn-submit" onclick="submitEmail()" id="btn-submit">
+      Révéler mon score
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+    <p class="form-note">Pas de spam. Uniquement des ressources cold email. Désabonnement en 1 clic.</p>
+  </div>
+</div>
+
+<!-- ═══════════════ SCREEN 3 ═══════════════ -->
+<div class="screen" id="screen-3">
+  <div class="load-score-count" id="load-count">0</div>
+  <div class="load-inner">
+    <div class="load-steps">
+      <div class="load-step" id="ls-1"><div class="load-step-dot"></div><span class="load-step-text">Analyse de la configuration DNS</span></div>
+      <div class="load-step" id="ls-2"><div class="load-step-dot"></div><span class="load-step-text">Évaluation de la délivrabilité</span></div>
+      <div class="load-step" id="ls-3"><div class="load-step-dot"></div><span class="load-step-text">Analyse du copywriting</span></div>
+      <div class="load-step" id="ls-4"><div class="load-step-dot"></div><span class="load-step-text">Calcul du score personnalisé</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SCREEN 4 ═══════════════ -->
+<div class="screen" id="screen-4">
+  <div class="res-hero">
+    <div class="res-hero-bg" id="res-bg-num">—</div>
+    <div class="res-hero-inner">
+      <div class="score-ring-wrap">
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <circle class="score-ring-bg" cx="80" cy="80" r="72"/>
+          <circle class="score-ring-fill" id="score-ring-fill" cx="80" cy="80" r="72"/>
+        </svg>
+        <div class="score-num-overlay">
+          <div class="score-num-big" id="score-num-big">0</div>
+          <div class="score-num-denom">/100</div>
+        </div>
+      </div>
+      <div class="res-verdict">
+        <div class="res-verdict-eyebrow" id="res-eyebrow">Diagnostic terminé</div>
+        <div class="res-verdict-title" id="res-title"></div>
+        <p class="res-verdict-body" id="res-body-text"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="res-body">
+    <div id="res-critical-section">
+      <div class="diag-section-title" id="res-critical-label">Points à corriger</div>
+      <div id="res-critical-cards"></div>
+    </div>
+    <div id="res-ok-section">
+      <div class="diag-section-title">Ce qui fonctionne</div>
+      <div id="res-ok-cards"></div>
+    </div>
+    <div class="res-cta">
+      <div class="res-cta-text">
+        <div class="res-cta-title">On reconstruit votre<br><em>pipeline en 21 jours.</em></div>
+        <p class="res-cta-sub">Infrastructure complète. Domaines dédiés, DNS, warm-up, 1 000 prospects ciblés, 2 séquences sur-mesure. Premiers rendez-vous à J+45 ou on optimise jusqu'au résultat.</p>
+      </div>
+      <div class="res-cta-action">
+        <a href="https://konverti.co" class="btn-primary" target="_blank" style="white-space:nowrap">
+          Voir l'offre Konverti
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <div class="res-cta-price">Pipeline clé en main · 2 490 €</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ JS ═══════ -->
+<script>
+// ── CURSOR
+const cur = document.getElementById('cursor');
+const trail = document.getElementById('cursor-trail');
+let mx=0, my=0;
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+  trail.style.left=mx+'px'; trail.style.top=my+'px';
+});
+document.querySelectorAll('button, a, .option, input').forEach(el => {
+  el.addEventListener('mouseenter', () => cur.classList.add('hover'));
+  el.addEventListener('mouseleave', () => cur.classList.remove('hover'));
+});
+
+// ── DATA
+const questions = [
+  { cat:"Infrastructure technique", text:"Avez-vous configuré SPF, DKIM et DMARC sur votre domaine d'envoi ?", hint:"Ces 3 protocoles authentifient vos emails. Sans eux, la majorité atterrissent en spam dès le départ.",
+    opts:[{k:"A",l:"Oui, les 3 sont configurés et vérifiés",s:"Configuration complète",score:10},{k:"B",l:"Partiellement (1 ou 2 sur 3)",s:"Configuration incomplète",score:5},{k:"C",l:"Non, je ne sais pas ce que c'est",s:"Risque élevé",score:0},{k:"D",l:"Je prospecte depuis mon domaine principal",s:"Risque critique",score:0}]},
+  { cat:"Infrastructure technique", text:"Utilisez-vous un domaine secondaire dédié à la prospection ?", hint:"Ex : team-monentreprise.com. Cela protège votre domaine principal d'un éventuel blacklistage.",
+    opts:[{k:"A",l:"Oui, domaine(s) dédié(s) configurés",s:"Bonne pratique",score:10},{k:"B",l:"Non, j'envoie depuis mon domaine principal",s:"Votre réputation est exposée",score:0},{k:"C",l:"Je ne prospecte pas encore par email",s:"",score:5}]},
+  { cat:"Délivrabilité", text:"Avez-vous effectué un warm-up complet avant d'envoyer vos campagnes ?", hint:"Le warm-up consiste à envoyer progressivement pendant 21 jours pour construire une réputation d'envoi.",
+    opts:[{k:"A",l:"Warm-up complet (21+ jours)",s:"Délivrabilité optimale",score:10},{k:"B",l:"Warm-up partiel (moins de 2 semaines)",s:"Risque modéré",score:4},{k:"C",l:"Non, j'ai envoyé directement",s:"Probable blacklistage",score:0},{k:"D",l:"Je ne savais pas que c'était nécessaire",s:"Point critique",score:0}]},
+  { cat:"Délivrabilité", text:"Quel est votre taux d'ouverture actuel sur vos campagnes cold email ?", hint:"Un taux sain se situe entre 35 % et 55 % pour une infrastructure bien configurée.",
+    opts:[{k:"A",l:"50 % ou plus",s:"Infrastructure excellente",score:10},{k:"B",l:"30 % à 50 %",s:"Résultats corrects",score:7},{k:"C",l:"10 % à 30 %",s:"Problème de délivrabilité",score:3},{k:"D",l:"Moins de 10 % ou je ne mesure pas",s:"Emails probablement en spam",score:0}]},
+  { cat:"Copywriting", text:"Comment personnalisez-vous vos emails de prospection ?", hint:"La personnalisation va au-delà du prénom. Elle touche le contexte spécifique de chaque prospect.",
+    opts:[{k:"A",l:"Icebreaker unique basé sur leur site/actualité/LinkedIn",s:"Forte personnalisation",score:10},{k:"B",l:"Prénom + nom de l'entreprise uniquement",s:"Personnalisation minimale",score:4},{k:"C",l:"Template identique pour tous",s:"Faible taux de réponse",score:1},{k:"D",l:"Je n'envoie pas encore",s:"",score:5}]},
+  { cat:"Copywriting", text:"Quelle est la longueur habituelle de vos emails de prospection ?", hint:"Les emails courts (50-80 mots) surperforment systématiquement les emails longs en cold B2B.",
+    opts:[{k:"A",l:"Court et direct, 50 à 80 mots",s:"Format optimal",score:10},{k:"B",l:"Moyen, 100 à 150 mots",s:"Acceptable",score:6},{k:"C",l:"Long, 200 mots et plus",s:"Taux de lecture faible",score:2},{k:"D",l:"Variable sans stratégie définie",s:"",score:1}]},
+  { cat:"Copywriting", text:"Quel est le CTA de votre premier email de prospection ?", hint:"Le premier email doit déclencher une conversation, jamais conclure une vente.",
+    opts:[{k:"A",l:"Une question simple qui invite à répondre",s:"Approche conversationnelle",score:10},{k:"B",l:"Un lien vers mon Calendly ou agenda",s:"Efficace mais froid",score:6},{k:"C",l:"Une présentation de mon offre complète",s:"Trop commercial en 1er contact",score:2},{k:"D",l:"Pas de CTA clairement défini",s:"",score:0}]},
+  { cat:"Séquences", text:"Combien de relances envoyez-vous après le premier email ?", hint:"80 % des réponses en cold email arrivent après la 2e ou 3e relance.",
+    opts:[{k:"A",l:"4 à 6 relances espacées sur 3 semaines",s:"Séquence optimale",score:10},{k:"B",l:"2 à 3 relances",s:"Correct mais optimisable",score:6},{k:"C",l:"1 seule relance",s:"Vous laissez des leads sur la table",score:3},{k:"D",l:"Aucune relance",s:"Vous perdez 80 % des opportunités",score:0}]},
+  { cat:"Ciblage", text:"Comment constituez-vous vos listes de prospects ?", hint:"La qualité des données impacte directement le taux de réponse et la délivrabilité.",
+    opts:[{k:"A",l:"Enrichissement automatisé (Clay, Apollo) avec vérification",s:"Données qualifiées",score:10},{k:"B",l:"Extraction manuelle LinkedIn / Sales Nav",s:"Correct mais chronophage",score:7},{k:"C",l:"Achat de liste ou base générique",s:"Risque spam + mauvaise qualité",score:1},{k:"D",l:"Pas de liste structurée",s:"Prospection non scalable",score:0}]},
+  { cat:"Volume", text:"Combien d'emails envoyez-vous par mois en prospection ?", hint:"Un volume sain : 500 à 2 000 emails/mois sur une infrastructure dédiée bien chauffée.",
+    opts:[{k:"A",l:"500 à 2 000 emails par mois",s:"Volume sain et scalable",score:10},{k:"B",l:"Moins de 500",s:"Sous-exploité",score:5},{k:"C",l:"Plus de 2 000 sans précautions techniques",s:"Risque de blacklistage",score:3},{k:"D",l:"Je ne prospecte pas encore",s:"",score:5}]},
+  { cat:"Résultats", text:"Quel est votre taux de réponse moyen sur vos campagnes ?", hint:"Un bon taux de réponse en cold email B2B se situe entre 3 % et 8 %.",
+    opts:[{k:"A",l:"5 % ou plus",s:"Très bonne performance",score:10},{k:"B",l:"2 % à 5 %",s:"Performance correcte",score:7},{k:"C",l:"0,5 % à 2 %",s:"Marge d'amélioration importante",score:3},{k:"D",l:"Moins de 0,5 % ou non mesuré",s:"Optimisation urgente nécessaire",score:0}]}
+];
+
+// ── STATE
+let curQ=0, answers=new Array(questions.length).fill(null);
+
+const BREVO_API_KEY = "";
+const BREVO_LIST_ID = 3;
+
+function showScreen(n) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+n).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function startAudit() {
+  showScreen(1);
+  initTensionDots();
+  document.getElementById('tension-dots').classList.add('show');
+  renderQ(0);
+}
+
+function initAlertFeed() {
+  const alerts = [
+    {sev:'r', icon:'!', tag:'Délivrabilité', msg:'<strong>21,3% des emails B2B</strong> n\'atteignent jamais la boîte de réception', src:'EmailToolTester, 2024'},
+    {sev:'r', icon:'!', tag:'Infrastructure', msg:'Un domaine sans <strong>DMARC</strong> peut être usurpé. Gmail rejette en masse depuis 2024', src:'Google Sender Guidelines'},
+    {sev:'y', icon:'◆', tag:'Copywriting', msg:'Les emails de <strong>moins de 75 mots</strong> génèrent 2x plus de réponses que les longs', src:'Lemlist State of Cold Email'},
+    {sev:'r', icon:'!', tag:'Warm-up', msg:'Une boîte neuve sans warm-up atteint un <strong>taux spam de 60%+</strong> dès la première semaine', src:'Mailreach Benchmark'},
+    {sev:'y', icon:'◆', tag:'Séquences', msg:'<strong>80% des réponses</strong> cold email arrivent après la 3e relance. La plupart s\'arrêtent à 1', src:'Saleshandy, 2023'},
+    {sev:'r', icon:'!', tag:'Domaine', msg:'Prospecter depuis son domaine principal <strong>blackliste aussi les emails transactionnels</strong>', src:'Postmark Deliverability'},
+    {sev:'g', icon:'↑', tag:'Benchmark', msg:'Une infrastructure bien configurée atteint <strong>95%+ de délivrabilité inbox</strong> de façon stable', src:'Instantly Benchmark Report'},
+    {sev:'y', icon:'◆', tag:'Taux ouverture', msg:'La moyenne mondiale du cold email est <strong>27% d\'ouverture</strong>. Une bonne infra dépasse 45%', src:'Hunter.io Report 2024'},
+    {sev:'r', icon:'!', tag:'SPF', msg:'Sans enregistrement SPF valide, <strong>Outlook bloque</strong> les envois en masse par défaut', src:'Microsoft SMTP Guidelines'},
+    {sev:'g', icon:'↑', tag:'Personnalisation', msg:'Un icebreaker basé sur le site du prospect <strong>augmente le taux de réponse de 2,4×</strong>', src:'Clay Data Study'},
+    {sev:'y', icon:'◆', tag:'Volume', msg:'Envoyer <strong>plus de 50 emails/jour</strong> depuis une boîte neuve déclenche les filtres anti-spam', src:'Google Workspace Limits'},
+    {sev:'r', icon:'!', tag:'DKIM', msg:'Sans DKIM, les emails transférés <strong>perdent leur authentification</strong> et finissent en indésirables', src:'RFC 6376 — DKIM Standard'},
+  ];
+  const track = document.getElementById('alert-track');
+  if (!track) return;
+  const html = [...alerts, ...alerts].map(a => `
+    <div class="alert-item ${a.sev}">
+      <div class="alert-icon ${a.sev}">${a.icon}</div>
+      <div class="alert-body">
+        <div class="alert-company">${a.tag}</div>
+        <div class="alert-msg">${a.msg}</div>
+        <div class="alert-time">${a.src}</div>
+      </div>
+    </div>
+  `).join('');
+  track.innerHTML = html;
+}
+initAlertFeed();
+
+function initTensionDots() {
+  const wrap = document.getElementById('tension-dots');
+  wrap.innerHTML = questions.map((_,i) =>
+    `<div class="tension-dot" id="td-${i}"></div>`
+  ).join('');
+}
+
+function updateTensionDots() {
+  questions.forEach((_,i) => {
+    const dot = document.getElementById('td-'+i);
+    if (!dot) return;
+    dot.classList.remove('answered','current');
+    if (answers[i] !== null) dot.classList.add('answered');
+    else if (i === curQ) dot.classList.add('current');
+  });
+}
+
+function renderQ(idx) {
+  const q = questions[idx];
+  const pct = Math.round((idx+1)/questions.length*100);
+
+  document.getElementById('q-bg-num').textContent = String(idx+1).padStart(2,'0');
+  document.getElementById('q-cat').textContent = q.cat;
+  document.getElementById('q-count').textContent = String(idx+1).padStart(2,'0')+' / '+String(questions.length).padStart(2,'0');
+  document.getElementById('q-prog-fill').style.width = pct+'%';
+
+  const qText = document.getElementById('q-text');
+  qText.classList.remove('slide-in');
+  void qText.offsetWidth;
+  qText.textContent = q.text;
+  qText.classList.add('slide-in');
+
+  document.getElementById('q-hint').textContent = q.hint||'';
+
+  const sel = answers[idx];
+  document.getElementById('btn-next').disabled = sel===null;
+  const backBtn = document.getElementById('btn-back');
+  if (backBtn) {
+    backBtn.style.display = idx > 0 ? 'flex' : 'none';
+  }
+
+  const wrap = document.getElementById('options-wrap');
+  wrap.classList.remove('slide-in');
+  void wrap.offsetWidth;
+  wrap.innerHTML = q.opts.map((opt,i)=>`
+    <div class="option${sel===i?' selected':''}" onclick="selectOpt(${i})">
+      <div class="opt-key">${opt.k}</div>
+      <div class="opt-body">
+        <div class="opt-label">${opt.l}</div>
+        ${opt.s?`<div class="opt-sub">${opt.s}</div>`:''}
+      </div>
+    </div>
+  `).join('');
+  wrap.classList.add('slide-in');
+
+  updateTensionDots();
+}
+
+function selectOpt(i) {
+  answers[curQ]=i;
+  renderQ(curQ);
+}
+
+
+function nextQ() {
+  if(answers[curQ]===null) return;
+  if(curQ<questions.length-1){ curQ++; renderQ(curQ); }
+  else showGate();
+}
+
+function prevQ() {
+  if(curQ>0){ curQ--; renderQ(curQ); }
+}
+
+function showGate() {
+  document.getElementById('tension-dots').classList.remove('show');
+  document.getElementById('gate-score-blur').textContent=calcScore();
+  showScreen(2);
+}
+
+function calcScore() {
+  let t=0;
+  answers.forEach((a,qi)=>{ if(a!==null) t+=questions[qi].opts[a].score; });
+  return Math.round(t/110*100);
+}
+
+function validateEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+async function submitEmail() {
+  const email=document.getElementById('input-email').value.trim();
+  const name=document.getElementById('input-name').value.trim();
+  const company=document.getElementById('input-company').value.trim();
+  const errEl=document.getElementById('email-error');
+  if(!validateEmail(email)){ errEl.style.display='block'; return; }
+  errEl.style.display='none';
+  document.getElementById('btn-submit').disabled=true;
+  document.getElementById('btn-submit').innerHTML='Chargement&hellip;';
+  document.getElementById('success-banner').style.display='block';
+  await sendToBrevo(email,name,company);
+  showScreen(3);
+  runLoadingAnim();
+  setTimeout(showResults, 3400);
+}
+
+async function sendToBrevo(email, name, company) {
+  try {
+    await fetch('/.netlify/functions/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name, company, score: calcScore() })
+    });
+  } catch(e) { console.log('Subscribe error (silenced):', e); }
+}
+
+function runLoadingAnim() {
+  const score=calcScore();
+  const countEl=document.getElementById('load-count');
+  let n=0;
+  const iv=setInterval(()=>{
+    n+=Math.ceil((score-n)*0.06)+1;
+    if(n>=score){ n=score; clearInterval(iv); countEl.classList.add('reveal'); }
+    countEl.textContent=n;
+  },30);
+  ['ls-1','ls-2','ls-3','ls-4'].forEach((id,i)=>{
+    setTimeout(()=>document.getElementById(id).classList.add('show'), 400+i*700);
+  });
+}
+
+function showResults() {
+  const score=calcScore();
+  showScreen(4);
+  document.getElementById('res-bg-num').textContent=score;
+
+  // Ring
+  setTimeout(()=>{
+    const fill=document.getElementById('score-ring-fill');
+    const circ=452;
+    let color= score>=70?'#1BDD7F': score>=40?'#F0B90B':'#DC3C3C';
+    fill.style.stroke=color;
+    fill.style.strokeDashoffset=circ-(score/100)*circ;
+    document.getElementById('score-num-big').style.color=color;
+    let n=0;
+    const iv=setInterval(()=>{
+      n+=2; document.getElementById('score-num-big').textContent=Math.min(n,score);
+      if(n>=score) clearInterval(iv);
+    },18);
+  },150);
+
+  // Verdict
+  let eyebrow,title,body;
+  if(score>=70){
+    eyebrow='Infrastructure solide';
+    title='Quelques ajustements,<br><em>des gains immédiats.</em>';
+    body='Vos fondations sont en place. Vous avez évité les erreurs critiques. Il reste des leviers d\'optimisation qui peuvent encore doubler vos résultats.';
+  } else if(score>=40){
+    eyebrow='Failles identifiées';
+    title='Votre setup perd<br><em>des leads chaque semaine.</em>';
+    body='Plusieurs points critiques limitent vos résultats. Chaque faille en rouge représente des conversations et des contrats qui n\'arrivent jamais.';
+  } else {
+    eyebrow='Situation critique';
+    title='Votre infrastructure<br><em>travaille contre vous.</em>';
+    body='Votre configuration actuelle expose votre domaine et génère très peu de conversations. Chaque email envoyé aggrave potentiellement la situation.';
+  }
+  document.getElementById('res-eyebrow').textContent=eyebrow;
+  document.getElementById('res-title').innerHTML=title;
+  document.getElementById('res-body-text').textContent=body;
+
+  // Diagnostic
+  const diagData=[
+    {check:()=>answers[0]!==null&&questions[0].opts[answers[0]].score<7, sev:'red', icon:'!',
+      label:'Vos emails ne sont pas authentifiés',
+      desc:'Sans SPF, DKIM et DMARC complets, Gmail et Outlook ne peuvent pas vérifier que c\'est bien vous qui envoyez. Résultat : spam direct, sans appel. Vos prospects ne verront jamais votre message.', pct:12},
+    {check:()=>answers[1]!==null&&questions[1].opts[answers[1]].score<7, sev:'red', icon:'!',
+      label:'Votre domaine principal est en danger',
+      desc:'Un seul prospect qui clique "spam" depuis votre domaine principal peut détruire en 48h la délivrabilité de toute votre communication. Devis, factures, emails clients inclus. Ce risque n\'est pas théorique.', pct:8},
+    {check:()=>answers[2]!==null&&questions[2].opts[answers[2]].score<5, sev:'red', icon:'!',
+      label:'Vos boîtes sont grillées avant même d\'envoyer',
+      desc:'Une boîte email neuve qui envoie des centaines de messages dès le départ est perçue comme un compte de spam. Les filtres la blacklistent automatiquement. Le warm-up n\'est pas une option, c\'est un prérequis.', pct:15},
+    {check:()=>answers[3]!==null&&questions[3].opts[answers[3]].score<5, sev:'red', icon:'!',
+      label:'La majorité de vos emails n\'arrivent pas en inbox',
+      desc:'En dessous de 30% d\'ouverture, vous n\'avez pas un problème de copywriting. Vous avez un problème d\'infrastructure. Écrire de meilleurs emails ne servira à rien tant que la délivrabilité n\'est pas réglée.', pct:18},
+    {check:()=>answers[4]!==null&&questions[4].opts[answers[4]].score<7, sev:'yellow', icon:'◆',
+      label:'Votre email ressemble à tous les autres',
+      desc:'Le prospect reçoit 30 à 50 emails de prospection par semaine. Si le vôtre commence par son prénom et le nom de son entreprise, il est supprimé en moins de 2 secondes, souvent avant d\'être ouvert.', pct:46},
+    {check:()=>answers[5]!==null&&questions[5].opts[answers[5]].score<6, sev:'yellow', icon:'◆',
+      label:'Personne ne lit vos emails jusqu\'au bout',
+      desc:'Un dirigeant lit ses emails sur mobile, entre deux réunions. Au-delà de 80 mots, il arrête. Chaque phrase en trop est une raison de ne pas répondre. Votre offre, aussi bonne soit-elle, reste invisible.', pct:44},
+    {check:()=>answers[6]!==null&&questions[6].opts[answers[6]].score<6, sev:'yellow', icon:'◆',
+      label:'Votre CTA ferme la conversation avant qu\'elle commence',
+      desc:'Proposer un rendez-vous de 30 minutes à un inconnu en premier email, c\'est demander un mariage au premier regard. La réponse est non, par réflexe. Le bon CTA pose une question, pas un agenda.', pct:42},
+    {check:()=>answers[7]!==null&&questions[7].opts[answers[7]].score<6, sev:'yellow', icon:'◆',
+      label:'Vous abandonnez juste avant la réponse',
+      desc:'Les données sont claires : 80% des réponses cold email arrivent à partir de la 3e relance. Si vous arrêtez avant, vous avez fait tout le travail d\'infrastructure pour récolter moins d\'un tiers des résultats possibles.', pct:50},
+    {check:()=>answers[8]!==null&&questions[8].opts[answers[8]].score>=7, sev:'green', icon:'✓',
+      label:'Données prospects : base saine',
+      desc:'Vos listes sont construites avec méthode et vérifiées. C\'est le fondement que beaucoup oublient. Vous l\'avez bien posé.', pct:88},
+    {check:()=>answers[0]!==null&&questions[0].opts[answers[0]].score>=8, sev:'green', icon:'✓',
+      label:'DNS correctement configurés',
+      desc:'SPF, DKIM, DMARC en place et vérifiés. Vos emails ont une identité reconnue par les serveurs de réception. Première brique essentielle bien posée.', pct:92},
+    {check:()=>answers[2]!==null&&questions[2].opts[answers[2]].score>=8, sev:'green', icon:'✓',
+      label:'Warm-up effectué correctement',
+      desc:'21 jours de chauffe progressive réalisés. Vos boîtes ont une réputation d\'envoi construite. Vous partez sur une base solide.', pct:90},
+    {check:()=>answers[1]!==null&&questions[1].opts[answers[1]].score>=8, sev:'green', icon:'✓',
+      label:'Domaine principal protégé',
+      desc:'Votre domaine de prospection est séparé de votre domaine principal. Aucun risque de contamination croisée en cas de signalement.', pct:86},
+  ];
+
+  const colors={red:'#DC3C3C',yellow:'#F0B90B',green:'#1BDD7F'};
+  const crit=[],ok=[];
+  diagData.forEach(d=>{
+    if(!d.check()) return;
+    const el=document.createElement('div');
+    el.className='diag-card';
+    el.innerHTML=`
+      <div class="diag-card-icon ${d.sev}">${d.icon}</div>
+      <div style="flex:1">
+        <div class="diag-card-name">${d.label}</div>
+        <div class="diag-card-desc">${d.desc}</div>
+        <div class="diag-card-bar"><div class="diag-card-bar-fill" style="width:0%;background:${colors[d.sev]}" data-w="${d.pct}"></div></div>
+      </div>`;
+    (d.sev==='green'?ok:crit).push(el);
+  });
+
+  if(crit.length===0){
+    const el=document.createElement('div');
+    el.className='diag-card';
+    el.innerHTML=`<div class="diag-card-icon green">✓</div><div><div class="diag-card-name">Aucune faille critique détectée</div><div class="diag-card-desc">Infrastructure bien configurée. Continuez à surveiller vos métriques hebdomadairement.</div></div>`;
+    crit.push(el);
+  }
+
+  const cc=document.getElementById('res-critical-cards');
+  cc.innerHTML='';
+  crit.forEach(e=>cc.appendChild(e));
+
+  const oc=document.getElementById('res-ok-cards');
+  oc.innerHTML='';
+  if(ok.length){ ok.forEach(e=>oc.appendChild(e)); document.getElementById('res-ok-section').style.display='block'; }
+  else document.getElementById('res-ok-section').style.display='none';
+
+  setTimeout(()=>{
+    document.querySelectorAll('.diag-card-bar-fill').forEach(b=>{
+      b.style.width=b.dataset.w+'%';
+    });
+  }, 600);
+}
+</script>
+</body>
+</html>
