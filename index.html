@@ -74,7 +74,7 @@ body {
   z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: 20px 48px;
-  mix-blend-mode: multiply;
+  mix-blend-mode: normal;
 }
 .nav-logo {
   font-family: var(--sans);
@@ -818,6 +818,7 @@ h1.hero-title .line-accent {
   opacity: 0;
   transition: opacity 0.4s;
 }
+@media (max-width: 1000px) { .tension-dots { display: none !important; } }
 .tension-dots.show { opacity: 1; }
 .tension-dot {
   width: 6px; height: 6px;
