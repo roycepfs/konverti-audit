@@ -1449,6 +1449,8 @@ h1.hero-title .line-accent {
 
 /* ── @MEDIA PRINT — mise en page PDF ── */
 @media print {
+  @page { size: A4 portrait; margin: 0; }
+
   /* Masquer tout sauf l'essentiel */
   #cursor, #cursor-trail, .tension-dots,
   .nav, .res-hero-bg, .res-pdf-row,
@@ -1457,87 +1459,104 @@ h1.hero-title .line-accent {
     display: none !important;
   }
 
-  /* Réinitialiser pour l'impression */
-  body { background: #fff; color: #000; font-size: 11pt; }
-  #screen-4 { display: block !important; padding-top: 0 !important; }
+  html, body {
+    width: 210mm; height: 297mm;
+    overflow: hidden;
+    background: #fff;
+    font-size: 8pt;
+  }
 
-  /* Hero résultats */
+  #screen-4 {
+    display: block !important;
+    padding-top: 0 !important;
+    width: 210mm;
+    height: 297mm;
+    overflow: hidden;
+  }
+
+  /* Hero compact */
   .res-hero {
     background: #0A0A0A !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-    padding: 32px 40px !important;
-    page-break-inside: avoid;
+    padding: 14px 28px !important;
   }
   .res-hero-inner {
     display: grid !important;
-    grid-template-columns: auto 1fr !important;
-    gap: 40px !important;
+    grid-template-columns: 80px 1fr !important;
+    gap: 20px !important;
     align-items: center !important;
   }
-  .score-ring-wrap { width: 120px !important; height: 120px !important; }
-  .score-num-big { color: inherit !important; }
-  .res-verdict-title { font-size: 22pt !important; }
-  .res-verdict-body { font-size: 10pt !important; }
+  .score-ring-wrap { width: 80px !important; height: 80px !important; }
+  .score-num-big { font-size: 28pt !important; }
+  .score-label { font-size: 7pt !important; }
+  .res-verdict-title { font-size: 14pt !important; margin-bottom: 4px !important; }
+  .res-verdict-body { font-size: 7.5pt !important; line-height: 1.4 !important; }
 
-  /* Accent bar */
+  /* Accent bar slim */
   div[style*="linear-gradient"] {
+    height: 3px !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
-  /* Body diagnostic */
+  /* Body diagnostic : 3 colonnes serrées */
   .res-body {
     display: block !important;
-    padding: 24px 40px !important;
-    columns: 2;
-    column-gap: 24px;
+    padding: 10px 28px 6px !important;
+    columns: 3 !important;
+    column-gap: 12px !important;
   }
-  #res-critical-section, #res-ok-section {
-    break-inside: avoid;
-    margin-bottom: 20px;
-  }
+  .res-body-header { font-size: 7pt !important; margin-bottom: 6px !important; }
+  #res-critical-section, #res-ok-section { margin-bottom: 8px !important; }
+  .diag-section-title { font-size: 7pt !important; margin-bottom: 4px !important; }
+
   .diag-card {
     break-inside: avoid;
-    margin-bottom: 8px !important;
-    border: 1px solid #e0e0e0 !important;
-    padding: 10px 12px !important;
-    gap: 10px !important;
+    margin-bottom: 4px !important;
+    border: 1px solid #e8e8e8 !important;
+    border-radius: 4px !important;
+    padding: 5px 7px !important;
+    gap: 6px !important;
+    display: flex !important;
+    align-items: flex-start !important;
   }
-  .diag-card:has(.diag-card-icon.red)   { border-left: 3px solid #DC3C3C !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .diag-card:has(.diag-card-icon.yellow){ border-left: 3px solid #F0B90B !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .diag-card:has(.diag-card-icon.green) { border-left: 3px solid #1BDD7F !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .diag-card-bar { display: none; }
-  .diag-card-name { font-size: 10pt !important; }
-  .diag-card-desc { font-size: 8.5pt !important; line-height: 1.4 !important; }
+  .diag-card:has(.diag-card-icon.red)    { border-left: 3px solid #DC3C3C !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .diag-card:has(.diag-card-icon.yellow) { border-left: 3px solid #F0B90B !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .diag-card:has(.diag-card-icon.green)  { border-left: 3px solid #1BDD7F !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .diag-card-bar, .diag-card-cat { display: none !important; }
+  .diag-card-icon { width: 14px !important; height: 14px !important; font-size: 8pt !important; flex-shrink: 0 !important; }
+  .diag-card-name { font-size: 7.5pt !important; font-weight: 700 !important; margin-bottom: 1px !important; }
+  .diag-card-desc { font-size: 6.5pt !important; line-height: 1.3 !important; color: #444 !important; }
 
-  /* CTA block simplifié */
+  /* CTA footer compact */
   .res-cta {
     background: #0A0A0A !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-    border-radius: 8px !important;
-    padding: 24px 32px !important;
-    margin: 0 40px 24px !important;
-    page-break-inside: avoid;
+    border-radius: 6px !important;
+    padding: 10px 20px !important;
+    margin: 6px 28px 0 !important;
+    display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: space-between !important;
+    break-inside: avoid;
   }
-  .res-cta-title { font-size: 14pt !important; }
-  .res-cta-sub { font-size: 9pt !important; }
+  .res-cta-title { font-size: 9pt !important; margin-bottom: 2px !important; }
+  .res-cta-sub { font-size: 7pt !important; }
   .res-cta-action { display: none !important; }
 
-  /* Footer PDF */
+  /* Footer */
   .res-body::after {
-    content: 'Diagnostic généré sur audit.konverti.co — Konverti, infrastructure cold email clé en main';
+    content: 'Diagnostic généré sur audit.konverti.co · Konverti, infrastructure cold email clé en main';
     display: block;
-    font-size: 8pt;
-    color: #999;
+    font-size: 6.5pt;
+    color: #aaa;
     text-align: center;
-    padding-top: 16px;
-    border-top: 1px solid #e0e0e0;
-    margin-top: 24px;
+    padding-top: 6px;
+    border-top: 1px solid #e8e8e8;
+    margin-top: 8px;
     column-span: all;
   }
 }
@@ -1722,7 +1741,7 @@ h1.hero-title .line-accent {
       <div class="gate-score-blur" id="gate-score-blur">??</div>
       <div class="gate-score-text">
         <strong>Votre score est prêt.</strong>
-        Laissez votre email pour accéder à votre diagnostic — et recevoir nos ressources cold email.
+        Laissez votre email pour accéder à votre diagnostic et recevoir nos ressources cold email.
       </div>
     </div>
     <div class="success-banner" id="success-banner">✓ Parfait, génération du diagnostic en cours…</div>
@@ -1731,7 +1750,7 @@ h1.hero-title .line-accent {
       <div class="gate-color-accent-bar"></div>
     </div>
     <h2 class="gate-title">Où envoyer<br><em>vos résultats ?</em></h2>
-    <p class="gate-sub">Votre diagnostic s'affiche immédiatement. Votre email vous donne accès aux ressources Konverti — guides, benchmarks et conseils cold email.</p>
+    <p class="gate-sub">Votre diagnostic s'affiche immédiatement. Votre email vous donne accès aux ressources Konverti : guides, benchmarks et conseils cold email.</p>
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">Prénom</label>
@@ -1751,7 +1770,7 @@ h1.hero-title .line-accent {
       Révéler mon score
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </button>
-    <p class="form-note">Diagnostic affiché immédiatement · Ressources cold email · Désabonnement en 1 clic.</p>
+    <p class="form-note">Diagnostic affiché immédiatement. Ressources cold email. Désabonnement en 1 clic.</p>
   </div>
 </div>
 
@@ -1854,12 +1873,12 @@ const questions = [
   {
     cat: "Infrastructure technique",
     text: "Combien de domaines d'envoi dédiés utilisez-vous pour prospecter ?",
-    hint: "La règle d'or : 1 domaine = max 3 boîtes = max 120 emails/jour. En dessous de 3 domaines pour tout volume sérieux, vous saturez les limites d'envoi et exposez votre réputation. Un domaine dédié coûte 10€/an — ne pas en avoir est l'erreur la plus chère du cold email.",
+    hint: "La règle d'or : 1 domaine = max 3 boîtes = max 120 emails/jour. En dessous de 3 domaines pour tout volume sérieux, vous saturez les limites d'envoi et exposez votre réputation. Un domaine dédié coûte 10€/an. Ne pas en avoir est l'erreur la plus chère du cold email.",
     opts: [
       {k:"A", l:"3 domaines ou plus, tous séparés du domaine principal", s:"Infrastructure scalable et sécurisée", score:10},
       {k:"B", l:"1 ou 2 domaines dédiés configurés", s:"Solide mais volume limité à 240 emails/jour max", score:6},
       {k:"C", l:"J'envoie depuis mon domaine principal (ex : @monentreprise.com)", s:"Votre réputation commerciale entière est exposée", score:0},
-      {k:"D", l:"Je n'ai pas encore de domaine dédié à la prospection", s:"Faille bloquante — priorité absolue avant tout envoi", score:0}
+      {k:"D", l:"Je n'ai pas encore de domaine dédié à la prospection", s:"Faille bloquante, priorité absolue avant tout envoi", score:0}
     ]
   },
   {
@@ -1867,9 +1886,9 @@ const questions = [
     text: "Quel est le statut de votre enregistrement DMARC ?",
     hint: "Depuis février 2024, Google et Yahoo exigent un DMARC actif pour tout envoi en masse (500+ emails/jour). Un DMARC en mode 'none' ne protège rien et ne satisfait pas ces nouvelles exigences. En mode 'reject', vous bloquez toute usurpation de votre domaine et vous conformez aux standards.",
     opts: [
-      {k:"A", l:"p=reject — vérification complète, protection maximale active", s:"Conformité Gmail/Yahoo 2024 respectée", score:10},
-      {k:"B", l:"p=quarantine — les emails suspects vont en spam plutôt qu'être rejetés", s:"Acceptable, migration vers reject recommandée", score:6},
-      {k:"C", l:"p=none — surveillance uniquement, aucune protection réelle", s:"Non conforme aux exigences 2024, à corriger", score:2},
+      {k:"A", l:"p=reject : vérification complète, protection maximale active", s:"Conformité Gmail/Yahoo 2024 respectée", score:10},
+      {k:"B", l:"p=quarantine : les emails suspects vont en spam plutôt qu'être rejetés", s:"Acceptable, migration vers reject recommandée", score:6},
+      {k:"C", l:"p=none : surveillance uniquement, aucune protection réelle", s:"Non conforme aux exigences 2024, à corriger", score:2},
       {k:"D", l:"Pas de DMARC configuré ou je ne sais pas ce que c'est", s:"Votre domaine peut être usurpé et vos envois rejetés en bloc", score:0}
     ]
   },
@@ -1878,21 +1897,21 @@ const questions = [
     text: "Comment avez-vous chauffé vos boîtes mail avant d'envoyer ?",
     hint: "Une boîte neuve n'a aucune réputation d'envoi. Les serveurs de réception la traitent comme suspecte. Le warm-up (21 jours minimum via Instantly, Lemwarm ou Mailreach) construit progressivement cette réputation par des échanges simulés. Sans ça, 60% à 80% de vos emails finissent en spam dès la première semaine.",
     opts: [
-      {k:"A", l:"Warm-up automatisé sur Instantly / Lemwarm / Mailreach — 21 jours minimum", s:"Process maîtrisé, réputation construite correctement", score:10},
+      {k:"A", l:"Warm-up automatisé sur Instantly / Lemwarm / Mailreach, 21 jours minimum", s:"Process maîtrisé, réputation construite correctement", score:10},
       {k:"B", l:"Warm-up manuel ou partiel (moins de 2 semaines)", s:"Insuffisant pour une délivrabilité stable sur la durée", score:3},
-      {k:"C", l:"Aucun warm-up, j'ai envoyé directement après création", s:"Vos boîtes sont probablement marquées — les résultats le montrent", score:0},
+      {k:"C", l:"Aucun warm-up, j'ai envoyé directement après création", s:"Vos boîtes sont probablement marquées. Les résultats le montrent.", score:0},
       {k:"D", l:"Je n'ai pas encore commencé à envoyer", s:"Démarrez le warm-up maintenant, avant le premier envoi", score:5}
     ]
   },
   {
     cat: "Délivrabilité",
     text: "Avez-vous testé votre score de délivrabilité avec un outil dédié ?",
-    hint: "Mail-Tester, GlockApps et Mailreach permettent de vérifier si vos emails atteignent l'inbox avant de lancer une campagne. Un score en dessous de 8/10 signifie qu'une partie significative de vos envois n'est jamais vue. C'est le test que la plupart des équipes ne font jamais — et qui explique pourquoi leurs campagnes 'ne fonctionnent pas'.",
+    hint: "Mail-Tester, GlockApps et Mailreach permettent de vérifier si vos emails atteignent l'inbox avant de lancer une campagne. Un score en dessous de 8/10 signifie qu'une partie significative de vos envois n'est jamais vue. C'est le test que la plupart des équipes ne font jamais. C'est ce qui explique pourquoi leurs campagnes ne fonctionnent pas.",
     opts: [
-      {k:"A", l:"Oui, score 9/10 ou plus — testé régulièrement avant chaque campagne", s:"Délivrabilité vérifiée, vous partez avec un avantage réel", score:10},
-      {k:"B", l:"Oui, score entre 6 et 8 — axes d'amélioration identifiés", s:"Base correcte, des optimisations DNS à appliquer", score:5},
+      {k:"A", l:"Oui, score 9/10 ou plus, testé régulièrement avant chaque campagne", s:"Délivrabilité vérifiée, vous partez avec un avantage réel", score:10},
+      {k:"B", l:"Oui, score entre 6 et 8, axes d'amélioration identifiés", s:"Base correcte, des optimisations DNS à appliquer", score:5},
       {k:"C", l:"Non, je n'ai jamais testé ma délivrabilité", s:"Vous envoyez sans savoir ce qui arrive vraiment en inbox", score:0},
-      {k:"D", l:"Je ne connaissais pas ces outils", s:"Diagnostic de délivrabilité manquant — test en 5 minutes sur mail-tester.com", score:0}
+      {k:"D", l:"Je ne connaissais pas ces outils", s:"Diagnostic de délivrabilité manquant. Test en 5 minutes sur mail-tester.com.", score:0}
     ]
   },
   {
@@ -1901,19 +1920,19 @@ const questions = [
     hint: "Un taux de bounce supérieur à 3% suffit pour déclencher les filtres anti-spam et dégrader durablement la réputation de votre domaine. Sans vérification systématique (Million Verifier, NeverBounce, ZeroBounce), chaque campagne abîme votre infrastructure. C'est une dégradation silencieuse : vous ne le voyez pas, mais les résultats baissent semaine après semaine.",
     opts: [
       {k:"A", l:"Vérification systématique via Million Verifier, NeverBounce ou ZeroBounce", s:"Taux de bounce sous contrôle, réputation préservée", score:10},
-      {k:"B", l:"Vérification ponctuelle ou partielle sur certaines listes", s:"Risque résiduel — des bounces silencieux dégradent votre score", score:5},
+      {k:"B", l:"Vérification ponctuelle ou partielle sur certaines listes", s:"Risque résiduel : des bounces silencieux dégradent votre score", score:5},
       {k:"C", l:"J'envoie sans vérifier les adresses au préalable", s:"Votre réputation d'envoi se dégrade à chaque campagne", score:0},
-      {k:"D", l:"Je n'avais pas identifié ça comme un enjeu", s:"Point critique — à intégrer avant la prochaine campagne", score:0}
+      {k:"D", l:"Je n'avais pas identifié ça comme un enjeu", s:"Point critique, à intégrer avant la prochaine campagne", score:0}
     ]
   },
   {
     cat: "Copywriting",
     text: "Quelle est la structure de votre email de prospection type ?",
-    hint: "La structure qui convertit en B2B : 1 icebreaker contextuel (10-15 mots sur leur actualité ou site) + 1 problème précis + 1 résultat concret avec chiffre + 1 seule question de qualification. Pas de présentation d'entreprise, pas de pitch d'offre, pas de prix. Le premier email ouvre une conversation — il ne la conclut pas.",
+    hint: "La structure qui convertit en B2B : 1 icebreaker contextuel (10-15 mots sur leur actualité ou site) + 1 problème précis + 1 résultat concret avec chiffre + 1 seule question de qualification. Pas de présentation d'entreprise, pas de pitch d'offre, pas de prix. Le premier email ouvre une conversation. Il ne la conclut pas.",
     opts: [
-      {k:"A", l:"Icebreaker contextuel + problème identifié + résultat chiffré + question courte", s:"Structure haute conversion — taux de réponse 4-8% atteignable", score:10},
-      {k:"B", l:"Présentation de mon entreprise + description de l'offre + lien Calendly", s:"Trop commercial pour un premier contact froid — taux de réponse < 1%", score:2},
-      {k:"C", l:"Template personnalisé avec prénom et nom d'entreprise uniquement", s:"Fausse personnalisation — supprimé en 3 secondes", score:1},
+      {k:"A", l:"Icebreaker contextuel + problème identifié + résultat chiffré + question courte", s:"Structure haute conversion, taux de réponse 4-8% atteignable", score:10},
+      {k:"B", l:"Présentation de mon entreprise + description de l'offre + lien Calendly", s:"Trop commercial pour un premier contact froid, taux de réponse < 1%", score:2},
+      {k:"C", l:"Template personnalisé avec prénom et nom d'entreprise uniquement", s:"Fausse personnalisation, supprimé en 3 secondes", score:1},
       {k:"D", l:"Pas de structure définie, je rédige au cas par cas", s:"Résultats imprévisibles, non scalable", score:0}
     ]
   },
@@ -1922,21 +1941,21 @@ const questions = [
     text: "Comment générez-vous vos icebreakers personnalisés à grande échelle ?",
     hint: "Un icebreaker efficace cite une information réelle et spécifique : une actualité LinkedIn récente, un recrutement en cours, un contenu publié, une technologie visible sur leur site. Il prouve que vous avez regardé leur situation. L'automatisation via Clay, n8n ou un process IA permet de le faire sur 500 prospects avec la même qualité qu'un email rédigé manuellement.",
     opts: [
-      {k:"A", l:"Automatisation via Clay, n8n ou un process IA sur données scrapées", s:"Personnalisation à grande échelle — le meilleur levier ROI en 2024", score:10},
+      {k:"A", l:"Automatisation via Clay, n8n ou un process IA sur données scrapées", s:"Personnalisation à grande échelle. Le meilleur levier ROI en 2024.", score:10},
       {k:"B", l:"Rédaction manuelle pour chaque prospect, basée sur leur profil LinkedIn ou site", s:"Qualité élevée mais non scalable au-delà de 50 emails/semaine", score:7},
-      {k:"C", l:"Champ variable basique : prénom, poste, nom d'entreprise", s:"Ce n'est plus de la personnalisation — tout le monde le fait", score:2},
+      {k:"C", l:"Champ variable basique : prénom, poste, nom d'entreprise", s:"Ce n'est plus de la personnalisation, tout le monde le fait", score:2},
       {k:"D", l:"Même introduction pour tous les prospects", s:"Taux de réponse entre 0,2% et 0,8% dans le meilleur des cas", score:0}
     ]
   },
   {
     cat: "Séquences",
     text: "Quelle est la structure de votre séquence complète après le premier email ?",
-    hint: "80% des réponses cold email arrivent après la 2e ou 3e relance. Une séquence efficace : J0 (email principal) + J3 (angle valeur ajoutée différent) + J8 (preuve sociale ou cas client) + J15 (breakup email court et direct). Chaque relance doit apporter un élément nouveau — pas juste 'suite à mon précédent message'.",
+    hint: "80% des réponses cold email arrivent après la 2e ou 3e relance. Une séquence efficace : J0 email principal, J3 (angle valeur ajoutée différent) + J8 (preuve sociale ou cas client) + J15 (breakup email court et direct). Chaque relance doit apporter un élément nouveau, pas juste «suite à mon précédent message».",
     opts: [
-      {k:"A", l:"4 à 6 emails sur 3 semaines, chaque relance avec un angle et contenu distincts", s:"Séquence professionnelle — vous captez les 80% qui répondent tard", score:10},
+      {k:"A", l:"4 à 6 emails sur 3 semaines, chaque relance avec un angle et contenu distincts", s:"Séquence professionnelle, vous captez les 80% qui répondent tard", score:10},
       {k:"B", l:"2 à 3 relances, mais souvent les mêmes arguments reformulés", s:"Volume correct, contenu à restructurer pour maximiser les retours", score:5},
       {k:"C", l:"1 seule relance du type 'je reviens vers vous'", s:"Vous abandonnez avant que 80% des prospects aient répondu", score:2},
-      {k:"D", l:"Aucune relance après le premier email", s:"Vous laissez 4 prospects sur 5 sans suite — argent jeté par les fenêtres", score:0}
+      {k:"D", l:"Aucune relance après le premier email", s:"Vous laissez 4 prospects sur 5 sans suite. Argent jeté par les fenêtres.", score:0}
     ]
   },
   {
@@ -1944,32 +1963,32 @@ const questions = [
     text: "Quelle est la précision de votre segmentation par campagne ?",
     hint: "Un segment gagnant se définit par : secteur précis + taille d'entreprise + poste décisionnaire + déclencheur contextuel (recrutement actif, levée de fonds, nouveau produit, expansion géographique). Plus le segment est précis, plus le message résonne. 200 prospects hyper-ciblés > 2 000 prospects génériques en termes de RDV générés.",
     opts: [
-      {k:"A", l:"Segment ultra-précis avec déclencheur contextuel identifié pour chaque liste", s:"Taux de réponse 5-12% atteignable — c'est là que se fait la différence", score:10},
+      {k:"A", l:"Segment ultra-précis avec déclencheur contextuel identifié pour chaque liste", s:"Taux de réponse 5-12% atteignable. C'est là que se fait la différence.", score:10},
       {k:"B", l:"Secteur + taille d'entreprise + poste, sans déclencheur spécifique", s:"Solide, peut encore s'affiner pour doubler les résultats", score:7},
-      {k:"C", l:"Ciblage par secteur uniquement, message identique pour tous", s:"Trop générique — le message ne résonne pas assez", score:3},
+      {k:"C", l:"Ciblage par secteur uniquement, message identique pour tous", s:"Trop générique, le message ne résonne pas assez", score:3},
       {k:"D", l:"Pas de segmentation définie, je prospecte large", s:"Taux de réponse inférieur à 1% garanti sur la durée", score:0}
     ]
   },
   {
     cat: "Pilotage",
     text: "Quelles métriques suivez-vous pour piloter vos campagnes ?",
-    hint: "Les métriques qui comptent vraiment : taux d'ouverture (objectif 40%+), taux de réponse positive (objectif 3%+), taux de bounce (alerte dès 3%), taux de désabonnement. Sans tableau de bord structuré, vous ne savez pas ce qui fonctionne, vous ne pouvez pas A/B tester, et vous optimisez à l'instinct — ce qui ne scale pas.",
+    hint: "Les métriques qui comptent vraiment : taux d'ouverture (objectif 40%+), taux de réponse positive (objectif 3%+), taux de bounce (alerte dès 3%), taux de désabonnement. Sans tableau de bord structuré, vous ne savez pas ce qui fonctionne, vous ne pouvez pas A/B tester, et vous optimisez à l'instinct, ce qui ne scale pas.",
     opts: [
-      {k:"A", l:"Dashboard complet : opens, réponses positives/négatives, bounces, unsubscribes — par campagne et par segment", s:"Pilotage data-driven — vous itérez vite et vous améliorez en continu", score:10},
-      {k:"B", l:"Je suis le taux d'ouverture et le nombre de réponses reçues", s:"Minimum viable — vous manquez les signaux faibles (bounce, désabonnement)", score:6},
+      {k:"A", l:"Dashboard complet : opens, réponses positives/négatives, bounces, unsubscribes, par campagne et par segment", s:"Pilotage data-driven : vous itérez vite et vous améliorez en continu", score:10},
+      {k:"B", l:"Je suis le taux d'ouverture et le nombre de réponses reçues", s:"Minimum viable, vous manquez les signaux faibles (bounce, désabonnement)", score:6},
       {k:"C", l:"Je regarde les réponses qui arrivent, c'est tout", s:"Vous ne voyez pas les problèmes de délivrabilité se former", score:2},
-      {k:"D", l:"Aucun suivi structuré de mes campagnes", s:"Impossible d'optimiser sans données — vous répétez les mêmes erreurs", score:0}
+      {k:"D", l:"Aucun suivi structuré de mes campagnes", s:"Impossible d'optimiser sans données. Vous répétez les mêmes erreurs.", score:0}
     ]
   },
   {
     cat: "Résultats",
     text: "Quel est votre taux de réponse positive sur les 30 derniers jours ?",
-    hint: "En dessous de 1% : le problème est dans l'infrastructure ou le ciblage — pas dans le copywriting. Entre 1% et 3% : la base est là, l'icebreaker et la séquence sont à optimiser. Au-dessus de 3% : vous avez une machine qui fonctionne, l'enjeu est de scaler le volume. Au-dessus de 5% : vous êtes dans le top 5% des setups cold email B2B.",
+    hint: "En dessous de 1%, le problème est dans l'infrastructure ou le ciblage, pas dans le copywriting. Entre 1% et 3% : la base est là, l'icebreaker et la séquence sont à optimiser. Au-dessus de 3% : vous avez une machine qui fonctionne, l'enjeu est de scaler le volume. Au-dessus de 5% : vous êtes dans le top 5% des setups cold email B2B.",
     opts: [
-      {k:"A", l:"5% ou plus — plusieurs RDV qualifiés par semaine en régime de croisière", s:"Machine opérationnelle — l'enjeu est maintenant de scaler", score:10},
-      {k:"B", l:"2% à 5% — quelques RDV par mois, résultats encourageants", s:"Base solide — des optimisations ciblées peuvent doubler ce chiffre", score:7},
-      {k:"C", l:"0,5% à 2% — très peu de retours malgré les envois", s:"Problème identifiable et correctible — infrastructure ou ciblage en cause", score:3},
-      {k:"D", l:"Moins de 0,5% ou je ne mesure pas précisément", s:"Investissement sans retour mesurable — les failles sont en amont", score:0}
+      {k:"A", l:"5% ou plus : plusieurs RDV qualifiés par semaine en régime de croisière", s:"Machine opérationnelle, l'enjeu est maintenant de scaler", score:10},
+      {k:"B", l:"2% à 5% : quelques RDV par mois, résultats encourageants", s:"Base solide, des optimisations ciblées peuvent doubler ce chiffre", score:7},
+      {k:"C", l:"0,5% à 2% : très peu de retours malgré les envois", s:"Problème identifiable et correctible, infrastructure ou ciblage en cause", score:3},
+      {k:"D", l:"Moins de 0,5% ou je ne mesure pas précisément", s:"Investissement sans retour mesurable. Les failles sont en amont.", score:0}
     ]
   }
 ];
@@ -2011,7 +2030,7 @@ function initAlertFeed() {
     {sev:'r', icon:'!', tag:'SPF', msg:'Sans enregistrement SPF valide, <strong>Outlook bloque</strong> les envois en masse par défaut', src:'Microsoft SMTP Guidelines'},
     {sev:'g', icon:'↑', tag:'Personnalisation', msg:'Un icebreaker basé sur le site du prospect <strong>augmente le taux de réponse de 2,4×</strong>', src:'Clay Data Study'},
     {sev:'y', icon:'◆', tag:'Volume', msg:'Envoyer <strong>plus de 50 emails/jour</strong> depuis une boîte neuve déclenche les filtres anti-spam', src:'Google Workspace Limits'},
-    {sev:'r', icon:'!', tag:'DKIM', msg:'Sans DKIM, les emails transférés <strong>perdent leur authentification</strong> et finissent en indésirables', src:'RFC 6376 — DKIM Standard'},
+    {sev:'r', icon:'!', tag:'DKIM', msg:'Sans DKIM, les emails transférés <strong>perdent leur authentification</strong> et finissent en indésirables', src:'RFC 6376, DKIM Standard'},
   ];
   const track = document.getElementById('alert-track');
   if (!track) return;
@@ -2203,14 +2222,14 @@ function showResults() {
       check:()=>answers[0]!==null&&questions[0].opts[answers[0]].score<6,
       sev:'red', icon:'!',
       label:'Infrastructure sous-dimensionnée : vous plafonnez avant même de commencer',
-      desc:'Avec 1 ou 2 domaines (ou pire, votre domaine principal), vous êtes limité à 60-120 emails/jour avant de saturer les filtres. C\'est insuffisant pour générer un flux de RDV prévisible. Chaque domaine dédié supplémentaire multiplie votre capacité sans risque — à 10€/an, c\'est le meilleur investissement du cold email.',
+      desc:'Avec 1 ou 2 domaines (ou pire, votre domaine principal), vous êtes limité à 60-120 emails/jour avant de saturer les filtres. C\'est insuffisant pour générer un flux de RDV prévisible. Chaque domaine dédié supplémentaire multiplie votre capacité sans risque. À 10€/an, c\'est le meilleur investissement du cold email.',
       pct:14
     },
     {
       check:()=>answers[1]!==null&&questions[1].opts[answers[1]].score<5,
       sev:'red', icon:'!',
       label:'DMARC insuffisant : vous n\'êtes pas conformes aux exigences Gmail/Yahoo 2024',
-      desc:'Depuis février 2024, Google et Yahoo filtrent ou rejettent les envois en masse dont le DMARC n\'est pas en mode "quarantine" ou "reject". Si le vôtre est en "none", des milliers de vos emails partent dans le vide — sans que votre outil d\'envoi vous le signale. C\'est souvent la cause principale d\'un taux d\'ouverture qui s\'effondre sans explication apparente.',
+      desc:'Depuis février 2024, Google et Yahoo filtrent ou rejettent les envois en masse dont le DMARC n\'est pas en mode "quarantine" ou "reject". Si le vôtre est en "none", des milliers de vos emails partent dans le vide, sans que votre outil d\'envoi vous le signale. C\'est souvent la cause principale d\'un taux d\'ouverture qui s\'effondre sans explication apparente.',
       pct:11
     },
     {
@@ -2224,7 +2243,7 @@ function showResults() {
       check:()=>answers[3]!==null&&questions[3].opts[answers[3]].score<5,
       sev:'red', icon:'!',
       label:'Délivrabilité non vérifiée : vous optimisez le mauvais problème',
-      desc:'Sans test préalable sur Mail-Tester ou GlockApps, vous ne savez pas si vos emails arrivent en inbox, en promotions ou en spam. Un score en dessous de 8/10 explique à lui seul la majorité des mauvais résultats. Réécrire vos emails ou changer vos séquences ne changera rien — le problème est en amont, au niveau de l\'infrastructure.',
+      desc:'Sans test préalable sur Mail-Tester ou GlockApps, vous ne savez pas si vos emails arrivent en inbox, en promotions ou en spam. Un score en dessous de 8/10 explique à lui seul la majorité des mauvais résultats. Réécrire vos emails ou changer vos séquences ne changera rien. Le problème est en amont, au niveau de l\'infrastructure.',
       pct:13
     },
     {
@@ -2239,21 +2258,21 @@ function showResults() {
       check:()=>answers[5]!==null&&questions[5].opts[answers[5]].score<6,
       sev:'yellow', icon:'◆',
       label:'Structure d\'email : vous pitchez là où il faut qualifier',
-      desc:'Le premier email froid n\'est pas fait pour vendre — il est fait pour identifier si le prospect a le problème que vous résolvez. Une structure "présentation + offre + Calendly" génère moins de 1% de réponse positive en 2024. La structure "icebreaker contextuel + problème précis + résultat chiffré + question courte" atteint régulièrement 4 à 8% sur un segment bien défini.',
+      desc:'Le premier email froid n\'est pas fait pour vendre. Il est fait pour identifier si le prospect a le problème que vous résolvez. Une structure "présentation + offre + Calendly" génère moins de 1% de réponse positive en 2024. La structure "icebreaker contextuel + problème précis + résultat chiffré + question courte" atteint régulièrement 4 à 8% sur un segment bien défini.',
       pct:43
     },
     {
       check:()=>answers[6]!==null&&questions[6].opts[answers[6]].score<6,
       sev:'yellow', icon:'◆',
       label:'Personnalisation insuffisante : votre email ressemble à ceux que vos prospects ignorent',
-      desc:'Mentionner le prénom et le poste d\'un prospect n\'est plus de la personnalisation — c\'est le minimum attendu depuis 2022. Ce qui déclenche une réponse en 2024, c\'est la preuve que vous avez regardé leur situation spécifique : une actualité LinkedIn récente, un recrutement en cours, une phrase de leur site. L\'automatisation via Clay ou n8n permet de le faire sur 500 prospects sans effort manuel.',
+      desc:'Mentionner le prénom et le poste d\'un prospect n\'est plus de la personnalisation. C\'est le minimum attendu depuis 2022. Ce qui déclenche une réponse en 2024, c\'est la preuve que vous avez regardé leur situation spécifique : une actualité LinkedIn récente, un recrutement en cours, une phrase de leur site. L\'automatisation via Clay ou n8n permet de le faire sur 500 prospects sans effort manuel.',
       pct:47
     },
     {
       check:()=>answers[7]!==null&&questions[7].opts[answers[7]].score<6,
       sev:'yellow', icon:'◆',
       label:'Séquence trop courte : vous abandonnez avant les 80% de réponses',
-      desc:'Les données sont claires sur ce point : 80% des réponses cold email arrivent après la 2e ou 3e relance. Si vous arrêtez après 1 ou 2 emails, vous faites tout le travail d\'infrastructure et de ciblage pour récolter moins d\'un cinquième des résultats possibles. Une relance efficace ne répète pas le même message — elle introduit un angle nouveau : preuve sociale, cas client, question directe.',
+      desc:'Les données sont claires sur ce point : 80% des réponses cold email arrivent après la 2e ou 3e relance. Si vous arrêtez après 1 ou 2 emails, vous faites tout le travail d\'infrastructure et de ciblage pour récolter moins d\'un cinquième des résultats possibles. Une relance efficace ne répète pas le même message. Elle introduit un angle nouveau : preuve sociale, cas client, question directe.',
       pct:51
     },
     {
@@ -2267,7 +2286,7 @@ function showResults() {
       check:()=>answers[9]!==null&&questions[9].opts[answers[9]].score<6,
       sev:'yellow', icon:'◆',
       label:'Pilotage insuffisant : vous répétez les erreurs sans le savoir',
-      desc:'Sans suivi structuré par campagne (opens, réponses positives, bounces, unsubscribes), il est impossible de savoir ce qui fait la différence entre une campagne à 0,8% et une à 6%. Le pilotage par les données est ce qui permet d\'itérer vite, d\'identifier les séquences qui fonctionnent et de scaler ce qui marche — plutôt que de tout réécrire à chaque fois.',
+      desc:'Sans suivi structuré par campagne (opens, réponses positives, bounces, unsubscribes), il est impossible de savoir ce qui fait la différence entre une campagne à 0,8% et une à 6%. Le pilotage par les données est ce qui permet d\'itérer vite, d\'identifier les séquences qui fonctionnent et de scaler ce qui marche, plutôt que de tout réécrire à chaque fois.',
       pct:44
     },
     // ── VERT : forces identifiées
@@ -2296,14 +2315,14 @@ function showResults() {
       check:()=>answers[4]!==null&&questions[4].opts[answers[4]].score>=8,
       sev:'green', icon:'✓',
       label:'Vérification d\'emails intégrée au process : taux de bounce maîtrisé',
-      desc:'Adresses vérifiées avant chaque envoi, taux de bounce sous le seuil critique de 3%. Votre réputation d\'envoi se préserve campagne après campagne. C\'est une discipline que plus de 60% des équipes qui font du cold email n\'appliquent pas — et qui explique leur dégradation progressive.',
+      desc:'Adresses vérifiées avant chaque envoi, taux de bounce sous le seuil critique de 3%. Votre réputation d\'envoi se préserve campagne après campagne. C\'est une discipline que plus de 60% des équipes qui font du cold email n\'appliquent pas. C\'est ce qui explique leur dégradation progressive.',
       pct:86
     },
     {
       check:()=>answers[6]!==null&&questions[6].opts[answers[6]].score>=8,
       sev:'green', icon:'✓',
       label:'Personnalisation automatisée à grande échelle',
-      desc:'Icebreakers contextuels générés via Clay, n8n ou un process IA. Vous combinez la précision d\'un email rédigé manuellement avec la capacité d\'un outil d\'envoi en masse. C\'est le levier de différenciation numéro un en cold B2B aujourd\'hui — et vous l\'avez déjà.',
+      desc:'Icebreakers contextuels générés via Clay, n8n ou un process IA. Vous combinez la précision d\'un email rédigé manuellement avec la capacité d\'un outil d\'envoi en masse. C\'est le levier de différenciation numéro un en cold B2B aujourd\'hui. Vous l\'avez déjà.',
       pct:93
     },
     {
