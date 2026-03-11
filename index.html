@@ -489,6 +489,11 @@ h1.hero-title .line-accent {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.5; }
+}
+
 /* ════════════════════════════════════════════════════════
    RESPONSIVE — 3 BREAKPOINTS PROPRES
    · Desktop  : > 1024px  (base styles)
@@ -2008,71 +2013,71 @@ function showResults() {
       check:()=>answers[0]!==null&&questions[0].opts[answers[0]].score<6,
       sev:'red', icon:'!',
       label:'Infrastructure sous-dimensionnée : vous plafonnez avant même de commencer',
-      desc:'Avec 1 ou 2 domaines (ou pire, votre domaine principal), vous êtes limité à 60-120 emails/jour avant de saturer les filtres. C'est insuffisant pour générer un flux de RDV prévisible. Chaque domaine dédié supplémentaire multiplie votre capacité sans risque — à 10€/an, c'est le meilleur investissement du cold email.',
+      desc:'Avec 1 ou 2 domaines (ou pire, votre domaine principal), vous êtes limité à 60-120 emails/jour avant de saturer les filtres. C\'est insuffisant pour générer un flux de RDV prévisible. Chaque domaine dédié supplémentaire multiplie votre capacité sans risque — à 10€/an, c\'est le meilleur investissement du cold email.',
       pct:14
     },
     {
       check:()=>answers[1]!==null&&questions[1].opts[answers[1]].score<5,
       sev:'red', icon:'!',
-      label:'DMARC insuffisant : vous n'êtes pas conformes aux exigences Gmail/Yahoo 2024',
-      desc:'Depuis février 2024, Google et Yahoo filtrent ou rejettent les envois en masse dont le DMARC n'est pas en mode "quarantine" ou "reject". Si le vôtre est en "none", des milliers de vos emails partent dans le vide — sans que votre outil d'envoi vous le signale. C'est souvent la cause principale d'un taux d'ouverture qui s'effondre sans explication apparente.',
+      label:'DMARC insuffisant : vous n\'êtes pas conformes aux exigences Gmail/Yahoo 2024',
+      desc:'Depuis février 2024, Google et Yahoo filtrent ou rejettent les envois en masse dont le DMARC n\'est pas en mode "quarantine" ou "reject". Si le vôtre est en "none", des milliers de vos emails partent dans le vide — sans que votre outil d\'envoi vous le signale. C\'est souvent la cause principale d\'un taux d\'ouverture qui s\'effondre sans explication apparente.',
       pct:11
     },
     {
       check:()=>answers[2]!==null&&questions[2].opts[answers[2]].score<5,
       sev:'red', icon:'!',
       label:'Warm-up absent ou bâclé : vos boîtes sont déjà compromises',
-      desc:'Sans warm-up structuré sur un outil comme Instantly ou Lemwarm, vos boîtes n'ont aucune réputation d'envoi. Les filtres les classent comme sources à risque dès les premiers envois. Ce n'est souvent pas récupérable sur les boîtes existantes : il faut recréer, reconfigurer, et recommencer 21 jours de chauffe. Ce délai coûte des semaines de pipeline.',
+      desc:'Sans warm-up structuré sur un outil comme Instantly ou Lemwarm, vos boîtes n\'ont aucune réputation d\'envoi. Les filtres les classent comme sources à risque dès les premiers envois. Ce n\'est souvent pas récupérable sur les boîtes existantes : il faut recréer, reconfigurer, et recommencer 21 jours de chauffe. Ce délai coûte des semaines de pipeline.',
       pct:16
     },
     {
       check:()=>answers[3]!==null&&questions[3].opts[answers[3]].score<5,
       sev:'red', icon:'!',
       label:'Délivrabilité non vérifiée : vous optimisez le mauvais problème',
-      desc:'Sans test préalable sur Mail-Tester ou GlockApps, vous ne savez pas si vos emails arrivent en inbox, en promotions ou en spam. Un score en dessous de 8/10 explique à lui seul la majorité des mauvais résultats. Réécrire vos emails ou changer vos séquences ne changera rien — le problème est en amont, au niveau de l'infrastructure.',
+      desc:'Sans test préalable sur Mail-Tester ou GlockApps, vous ne savez pas si vos emails arrivent en inbox, en promotions ou en spam. Un score en dessous de 8/10 explique à lui seul la majorité des mauvais résultats. Réécrire vos emails ou changer vos séquences ne changera rien — le problème est en amont, au niveau de l\'infrastructure.',
       pct:13
     },
     {
       check:()=>answers[4]!==null&&questions[4].opts[answers[4]].score<5,
       sev:'red', icon:'!',
       label:'Bounces non maîtrisés : dégradation silencieuse de votre réputation',
-      desc:'Au-dessus de 3% de bounce, les serveurs de réception abaissent progressivement votre score d'envoi. La dégradation est silencieuse : vos emails sont envoyés, votre outil marque "délivré", mais de moins en moins atteignent l'inbox. Sans vérification systématique des adresses (Million Verifier, NeverBounce), chaque campagne accélère ce processus.',
+      desc:'Au-dessus de 3% de bounce, les serveurs de réception abaissent progressivement votre score d\'envoi. La dégradation est silencieuse : vos emails sont envoyés, votre outil marque "délivré", mais de moins en moins atteignent l\'inbox. Sans vérification systématique des adresses (Million Verifier, NeverBounce), chaque campagne accélère ce processus.',
       pct:9
     },
     // ── JAUNE : optimisations copywriting / séquences / ciblage
     {
       check:()=>answers[5]!==null&&questions[5].opts[answers[5]].score<6,
       sev:'yellow', icon:'◆',
-      label:'Structure d'email : vous pitchez là où il faut qualifier',
-      desc:'Le premier email froid n'est pas fait pour vendre — il est fait pour identifier si le prospect a le problème que vous résolvez. Une structure "présentation + offre + Calendly" génère moins de 1% de réponse positive en 2024. La structure "icebreaker contextuel + problème précis + résultat chiffré + question courte" atteint régulièrement 4 à 8% sur un segment bien défini.',
+      label:'Structure d\'email : vous pitchez là où il faut qualifier',
+      desc:'Le premier email froid n\'est pas fait pour vendre — il est fait pour identifier si le prospect a le problème que vous résolvez. Une structure "présentation + offre + Calendly" génère moins de 1% de réponse positive en 2024. La structure "icebreaker contextuel + problème précis + résultat chiffré + question courte" atteint régulièrement 4 à 8% sur un segment bien défini.',
       pct:43
     },
     {
       check:()=>answers[6]!==null&&questions[6].opts[answers[6]].score<6,
       sev:'yellow', icon:'◆',
       label:'Personnalisation insuffisante : votre email ressemble à ceux que vos prospects ignorent',
-      desc:'Mentionner le prénom et le poste d'un prospect n'est plus de la personnalisation — c'est le minimum attendu depuis 2022. Ce qui déclenche une réponse en 2024, c'est la preuve que vous avez regardé leur situation spécifique : une actualité LinkedIn récente, un recrutement en cours, une phrase de leur site. L'automatisation via Clay ou n8n permet de le faire sur 500 prospects sans effort manuel.',
+      desc:'Mentionner le prénom et le poste d\'un prospect n\'est plus de la personnalisation — c\'est le minimum attendu depuis 2022. Ce qui déclenche une réponse en 2024, c\'est la preuve que vous avez regardé leur situation spécifique : une actualité LinkedIn récente, un recrutement en cours, une phrase de leur site. L\'automatisation via Clay ou n8n permet de le faire sur 500 prospects sans effort manuel.',
       pct:47
     },
     {
       check:()=>answers[7]!==null&&questions[7].opts[answers[7]].score<6,
       sev:'yellow', icon:'◆',
       label:'Séquence trop courte : vous abandonnez avant les 80% de réponses',
-      desc:'Les données sont claires sur ce point : 80% des réponses cold email arrivent après la 2e ou 3e relance. Si vous arrêtez après 1 ou 2 emails, vous faites tout le travail d'infrastructure et de ciblage pour récolter moins d'un cinquième des résultats possibles. Une relance efficace ne répète pas le même message — elle introduit un angle nouveau : preuve sociale, cas client, question directe.',
+      desc:'Les données sont claires sur ce point : 80% des réponses cold email arrivent après la 2e ou 3e relance. Si vous arrêtez après 1 ou 2 emails, vous faites tout le travail d\'infrastructure et de ciblage pour récolter moins d\'un cinquième des résultats possibles. Une relance efficace ne répète pas le même message — elle introduit un angle nouveau : preuve sociale, cas client, question directe.',
       pct:51
     },
     {
       check:()=>answers[8]!==null&&questions[8].opts[answers[8]].score<6,
       sev:'yellow', icon:'◆',
       label:'Ciblage trop large : votre message ne résonne pas assez',
-      desc:'Un email générique envoyé à "tous les DSI des ESN françaises" génère du volume mais peu de résultats. La logique gagnante en cold B2B est l'hyper-segmentation : un secteur + une taille d'entreprise + un poste décisionnaire + un déclencheur contextuel (recrutement actif, expansion, levée de fonds). Sur 200 prospects hyper-ciblés avec le bon déclencheur, vous obtenez plus de RDV que sur 2 000 prospects génériques.',
+      desc:'Un email générique envoyé à "tous les DSI des ESN françaises" génère du volume mais peu de résultats. La logique gagnante en cold B2B est l\'hyper-segmentation : un secteur + une taille d\'entreprise + un poste décisionnaire + un déclencheur contextuel (recrutement actif, expansion, levée de fonds). Sur 200 prospects hyper-ciblés avec le bon déclencheur, vous obtenez plus de RDV que sur 2 000 prospects génériques.',
       pct:39
     },
     {
       check:()=>answers[9]!==null&&questions[9].opts[answers[9]].score<6,
       sev:'yellow', icon:'◆',
       label:'Pilotage insuffisant : vous répétez les erreurs sans le savoir',
-      desc:'Sans suivi structuré par campagne (opens, réponses positives, bounces, unsubscribes), il est impossible de savoir ce qui fait la différence entre une campagne à 0,8% et une à 6%. Le pilotage par les données est ce qui permet d'itérer vite, d'identifier les séquences qui fonctionnent et de scaler ce qui marche — plutôt que de tout réécrire à chaque fois.',
+      desc:'Sans suivi structuré par campagne (opens, réponses positives, bounces, unsubscribes), il est impossible de savoir ce qui fait la différence entre une campagne à 0,8% et une à 6%. Le pilotage par les données est ce qui permet d\'itérer vite, d\'identifier les séquences qui fonctionnent et de scaler ce qui marche — plutôt que de tout réécrire à chaque fois.',
       pct:44
     },
     // ── VERT : forces identifiées
@@ -2080,42 +2085,42 @@ function showResults() {
       check:()=>answers[0]!==null&&questions[0].opts[answers[0]].score>=8,
       sev:'green', icon:'✓',
       label:'Infrastructure multi-domaines correctement dimensionnée',
-      desc:'Plusieurs domaines dédiés configurés, distincts du domaine principal. Vous pouvez scaler le volume d'envoi sans exposer votre réputation commerciale. C'est la fondation technique que 70% des équipes qui font du cold email n'ont pas encore en place.',
+      desc:'Plusieurs domaines dédiés configurés, distincts du domaine principal. Vous pouvez scaler le volume d\'envoi sans exposer votre réputation commerciale. C\'est la fondation technique que 70% des équipes qui font du cold email n\'ont pas encore en place.',
       pct:91
     },
     {
       check:()=>answers[1]!==null&&questions[1].opts[answers[1]].score>=8,
       sev:'green', icon:'✓',
       label:'DMARC en mode reject : conformité 2024 respectée',
-      desc:'Vos domaines sont protégés contre l'usurpation et conformes aux nouvelles exigences de Google et Yahoo. La plupart des équipes ne découvrent cette faille qu'après une chute brutale et inexpliquée de leur délivrabilité. Vous l'avez anticipée.',
+      desc:'Vos domaines sont protégés contre l\'usurpation et conformes aux nouvelles exigences de Google et Yahoo. La plupart des équipes ne découvrent cette faille qu\'après une chute brutale et inexpliquée de leur délivrabilité. Vous l\'avez anticipée.',
       pct:88
     },
     {
       check:()=>answers[2]!==null&&questions[2].opts[answers[2]].score>=8,
       sev:'green', icon:'✓',
-      label:'Warm-up outillé et structuré : réputation d'envoi construite correctement',
-      desc:'Vos boîtes ont une réputation construite sur un outil professionnel. Les serveurs de réception les connaissent et leur font confiance. C'est un avantage durable : une fois la réputation établie, elle se maintient avec un warm-up continu en fond.',
+      label:'Warm-up outillé et structuré : réputation d\'envoi construite correctement',
+      desc:'Vos boîtes ont une réputation construite sur un outil professionnel. Les serveurs de réception les connaissent et leur font confiance. C\'est un avantage durable : une fois la réputation établie, elle se maintient avec un warm-up continu en fond.',
       pct:89
     },
     {
       check:()=>answers[4]!==null&&questions[4].opts[answers[4]].score>=8,
       sev:'green', icon:'✓',
-      label:'Vérification d'emails intégrée au process : taux de bounce maîtrisé',
-      desc:'Adresses vérifiées avant chaque envoi, taux de bounce sous le seuil critique de 3%. Votre réputation d'envoi se préserve campagne après campagne. C'est une discipline que plus de 60% des équipes qui font du cold email n'appliquent pas — et qui explique leur dégradation progressive.',
+      label:'Vérification d\'emails intégrée au process : taux de bounce maîtrisé',
+      desc:'Adresses vérifiées avant chaque envoi, taux de bounce sous le seuil critique de 3%. Votre réputation d\'envoi se préserve campagne après campagne. C\'est une discipline que plus de 60% des équipes qui font du cold email n\'appliquent pas — et qui explique leur dégradation progressive.',
       pct:86
     },
     {
       check:()=>answers[6]!==null&&questions[6].opts[answers[6]].score>=8,
       sev:'green', icon:'✓',
       label:'Personnalisation automatisée à grande échelle',
-      desc:'Icebreakers contextuels générés via Clay, n8n ou un process IA. Vous combinez la précision d'un email rédigé manuellement avec la capacité d'un outil d'envoi en masse. C'est le levier de différenciation numéro un en cold B2B aujourd'hui — et vous l'avez déjà.',
+      desc:'Icebreakers contextuels générés via Clay, n8n ou un process IA. Vous combinez la précision d\'un email rédigé manuellement avec la capacité d\'un outil d\'envoi en masse. C\'est le levier de différenciation numéro un en cold B2B aujourd\'hui — et vous l\'avez déjà.',
       pct:93
     },
     {
       check:()=>answers[10]!==null&&questions[10].opts[answers[10]].score>=7,
       sev:'green', icon:'✓',
       label:'Taux de réponse solide : votre machine fonctionne',
-      desc:'Un taux de réponse positive au-dessus de 2% confirme que les fondations sont solides. Avec les bons ajustements sur la segmentation et les angles de relance, vous avez de la marge pour doubler ce chiffre sans toucher à l'infrastructure.',
+      desc:'Un taux de réponse positive au-dessus de 2% confirme que les fondations sont solides. Avec les bons ajustements sur la segmentation et les angles de relance, vous avez de la marge pour doubler ce chiffre sans toucher à l\'infrastructure.',
       pct:94
     },
   ];
