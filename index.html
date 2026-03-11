@@ -75,6 +75,17 @@ body {
   display: flex; align-items: center; justify-content: space-between;
   padding: 20px 48px;
   mix-blend-mode: normal;
+  background: rgba(250,250,250,0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+/* Nav sur fond noir : inverser les couleurs */
+.nav-dark .nav-logo { color: var(--white); }
+.nav-dark .nav-tag {
+  color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.1);
 }
 .nav-logo {
   font-family: var(--sans);
@@ -124,6 +135,9 @@ body {
   overflow: hidden;
   background: var(--white);
   height: 100vh;
+}
+@media (max-width: 1024px) {
+  .hero-left { height: auto; min-height: calc(100vh - 84px); }
 }
 
 /* Dot grid background */
@@ -475,45 +489,138 @@ h1.hero-title .line-accent {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ════════════════════════════════════════
-   RESPONSIVE — MOBILE / TABLET / DESKTOP
-════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════
+   RESPONSIVE — 3 BREAKPOINTS PROPRES
+   · Desktop  : > 1024px  (base styles)
+   · Tablet   : 600–1024px
+   · Mobile   : < 600px
+════════════════════════════════════════════════════════ */
 
-/* ── TABLET (≤1000px) ── */
-@media (max-width: 1000px) {
+/* ── Éléments color-fill : présents sur toutes les tailles ── */
 
-  /* Hero */
-  #screen-0 { grid-template-columns: 1fr !important; height: auto; }
-  .hero-right { display: none; }
-  .hero-left { padding: 96px 48px 56px; height: auto; min-height: 100vh; justify-content: center; }
-  .hero-ticker { margin-left: -48px; margin-right: -48px; }
-  .hero-circle { display: none; }
-  h1.hero-title { font-size: clamp(44px, 7vw, 72px); }
-
-  /* Questions */
-  .q-layout { display: flex !important; flex-direction: column !important; }
-  .q-left { position: relative !important; height: auto !important; min-height: auto !important; top: auto !important; padding: 96px 48px 40px !important; }
-  .q-right { padding: 40px 48px 80px !important; }
-  .q-question { font-size: clamp(22px, 4vw, 32px) !important; display: block !important; }
-
-  /* Results */
-  .res-hero { padding: 64px 48px; }
-  .res-hero-inner { grid-template-columns: 1fr; gap: 32px; text-align: center; }
-  .res-verdict-eyebrow { justify-content: center; }
-  .res-verdict-body { margin: 0 auto; }
-  .res-body { grid-template-columns: 1fr !important; padding: 48px; gap: 32px; }
-  .res-cta { flex-direction: column; align-items: flex-start; padding: 40px; }
-
-  /* Nav */
-  .nav { padding: 18px 28px; }
-  .live-score { display: none; }
-  .tension-dots { display: none; }
+/* Bande verte de présence couleur sur hero mobile/tablet */
+.hero-color-band {
+  display: none;
+  background: var(--black);
+  border-top: 3px solid var(--green);
+  padding: 20px 24px;
+  display: none;
+  gap: 0;
+  overflow: hidden;
+}
+.hero-color-band-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  border-right: 1px solid rgba(255,255,255,0.07);
+  position: relative;
+}
+.hero-color-band-item:last-child { border-right: none; }
+.hero-color-band-item::before {
+  content: '';
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 20px; height: 2px;
+  background: var(--green);
+  border-radius: 2px;
+}
+.hero-color-band-num {
+  font-family: var(--mono);
+  font-size: 26px; line-height: 1;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.hero-color-band-num span { color: var(--green); }
+.hero-color-band-label {
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  text-align: center;
+  line-height: 1.4;
 }
 
-/* ── MOBILE (≤600px) ── */
-@media (max-width: 600px) {
+/* Accent de couleur sur le panneau gate (screen 2) */
+.gate-color-accent {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 28px;
+}
+.gate-color-accent-bar {
+  flex: 1; height: 2px;
+  background: linear-gradient(90deg, var(--green), transparent);
+}
+.gate-color-accent-text {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--green);
+  white-space: nowrap;
+}
 
-  /* Désactive cursor custom sur touch */
+/* Pill de catégorie dans chaque diag-card — renforcement de couleur */
+.diag-card-cat {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* ── TABLET (600px – 1024px) ─────────────────────────── */
+@media (max-width: 1024px) {
+
+  /* NAV */
+  .nav { padding: 18px 32px; }
+
+  /* HERO — panel droit caché, bande couleur visible */
+  #screen-0.active { display: flex !important; flex-direction: column !important; height: auto !important; }
+  .hero-right { display: none !important; }
+  .hero-color-band { display: flex !important; }
+  .hero-left {
+    padding: 96px 48px 52px;
+    height: auto;
+    min-height: calc(100vh - 84px);
+    justify-content: center;
+  }
+  .hero-ticker { margin-left: -48px; margin-right: -48px; }
+  .hero-circle { display: none; }
+  h1.hero-title { font-size: clamp(42px, 6.5vw, 72px); }
+  .hero-stat-num { font-size: 30px; }
+
+  /* QUESTIONS — colonne, panneau noir toujours présent */
+  .q-layout { display: flex !important; flex-direction: column !important; }
+  .q-left {
+    position: relative !important;
+    height: auto !important;
+    min-height: auto !important;
+    top: auto !important;
+    padding: 96px 48px 40px !important;
+    border-bottom: 3px solid var(--green);
+  }
+  .q-right { padding: 40px 48px 80px !important; }
+  .q-question { font-size: clamp(22px, 4vw, 32px) !important; display: block !important; }
+  .tension-dots { display: none !important; }
+
+  /* GATE */
+  #screen-2 { padding: 100px 48px 80px; }
+
+  /* RÉSULTATS */
+  .res-hero { padding: 64px 48px; }
+  .res-hero-inner { grid-template-columns: auto 1fr !important; gap: 40px !important; text-align: left !important; }
+  .res-verdict-eyebrow { justify-content: flex-start !important; }
+  .res-body {
+    grid-template-columns: 1fr 1fr !important;
+    padding: 48px !important;
+    gap: 32px !important;
+  }
+  .res-cta { flex-direction: column; align-items: flex-start; padding: 40px; gap: 28px; }
+  .res-cta-action { width: 100%; }
+  .res-cta-action .btn-primary { width: 100%; justify-content: center; }
+}
+
+/* ── MOBILE (< 600px) ─────────────────────────────────── */
+@media (max-width: 599px) {
+
+  /* Curseur custom désactivé (touch) */
   #cursor, #cursor-trail { display: none !important; }
   * { cursor: auto !important; }
 
@@ -521,82 +628,176 @@ h1.hero-title .line-accent {
   .nav { padding: 14px 20px; }
   .nav-tag { display: none; }
 
-  /* HERO */
-  .hero-left { padding: 80px 20px 44px; }
+  /* ── SCREEN 0 — HERO ── */
+  #screen-0.active { display: flex !important; flex-direction: column !important; height: auto !important; }
+  .hero-right { display: none !important; }
+  .hero-color-band { display: flex !important; }
+  .hero-color-band-num { font-size: 22px; }
+  .hero-color-band-label { font-size: 8px; }
+
+  .hero-left { padding: 78px 20px 36px; height: auto; min-height: auto; }
   .hero-ticker { margin-left: -20px; margin-right: -20px; }
-  .hero-ticker-item { padding: 0 20px; font-size: 10px; }
-  .hero-eyebrow-row { margin-bottom: 18px; gap: 10px; }
-  .hero-eyebrow-line { width: 20px; }
-  h1.hero-title { font-size: clamp(34px, 10vw, 52px); line-height: 0.96; }
-  .hero-sub { font-size: 14px; line-height: 1.65; margin-bottom: 24px; }
-  .hero-cta-row { flex-direction: column; align-items: stretch; gap: 12px; margin-bottom: 28px; }
-  .btn-primary { width: 100%; justify-content: center; padding: 16px 20px; font-size: 13px; }
+  .hero-ticker-item { padding: 0 18px; font-size: 9.5px; }
+  .hero-eyebrow-row { margin-bottom: 20px; gap: 10px; }
+  .hero-eyebrow-line { width: 18px; }
+
+  h1.hero-title {
+    font-size: clamp(32px, 9.5vw, 50px);
+    line-height: 0.97;
+  }
+  .hero-sub { font-size: 14px; line-height: 1.65; margin-bottom: 22px; }
+  .hero-cta-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .btn-primary {
+    width: 100%;
+    justify-content: center;
+    padding: 15px 20px;
+    font-size: 13px;
+  }
   .btn-ghost { font-size: 12px; justify-content: center; }
+
   .hero-stats { grid-template-columns: 1fr 1fr; }
-  .hero-stat { padding: 14px 12px; }
-  .hero-stat:nth-child(3) { grid-column: 1 / -1; border-right: none; border-top: 1px solid var(--gray-200); }
-  .hero-stat-num { font-size: 26px; }
-  .hero-stat-label { font-size: 10px; }
+  .hero-stat { padding: 13px 10px; }
+  .hero-stat:nth-child(3) {
+    grid-column: 1 / -1;
+    border-right: none;
+    border-top: 1px solid var(--gray-200);
+  }
+  .hero-stat-num { font-size: 24px; }
+  .hero-stat-label { font-size: 9.5px; }
 
-  /* QUESTIONS */
+  /* ── SCREEN 1 — QUESTIONS ── */
   .q-layout { display: flex !important; flex-direction: column !important; }
-  .q-left { position: relative !important; height: auto !important; min-height: auto !important; top: auto !important; padding: 80px 20px 24px !important; }
-  .q-left-bg-num { font-size: 110px; opacity: 0.05; bottom: -10px; left: -8px; }
-  .q-cat { font-size: 9px; margin-bottom: 10px; }
-  .q-question { font-size: clamp(17px, 5.5vw, 24px) !important; display: block !important; line-height: 1.3; }
-  .q-hint { font-size: 12px; margin-top: 14px; padding-top: 14px; }
-  .btn-back-left { padding: 9px 14px; font-size: 12px; margin-bottom: 16px; }
-  .q-progress { margin-top: 20px; }
-  .q-right { padding: 20px 20px 90px !important; }
-  .options-wrap { gap: 10px !important; }
-  .opt-btn { padding: 13px 14px; gap: 12px; }
-  .opt-key { width: 26px; height: 26px; font-size: 10px; flex-shrink: 0; }
-  .opt-label { font-size: 13px; }
-  .opt-score { display: none; }
-  .q-nav-row { padding: 14px 20px; }
-  .btn-next { width: 100%; justify-content: center; padding: 14px 20px; font-size: 13px; }
+  .q-left {
+    position: relative !important;
+    height: auto !important;
+    min-height: auto !important;
+    top: auto !important;
+    padding: 78px 20px 28px !important;
+    border-bottom: 3px solid var(--green);
+  }
+  .q-left-bg-num {
+    font-size: 100px;
+    opacity: 0.04;
+    bottom: -8px;
+    left: -6px;
+  }
+  .q-cat { font-size: 9px; margin-bottom: 8px; }
+  .q-question {
+    font-size: clamp(16px, 5.5vw, 22px) !important;
+    display: block !important;
+    line-height: 1.32;
+  }
+  .q-hint {
+    font-size: 12px;
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+  .btn-back-left { padding: 9px 14px; font-size: 12px; margin-bottom: 14px; }
+  .q-progress { margin-top: 18px; }
+  .q-progress-count { font-size: 18px; }
 
-  /* GATE (email) */
-  #screen-2 { padding: 90px 20px 60px; align-items: flex-start; }
+  .q-right { padding: 20px 20px 24px !important; }
+  .options-wrap { gap: 8px !important; margin-bottom: 20px; }
+  .option { padding: 14px 16px; gap: 12px; }
+  .option:hover { transform: none; }
+  .option.selected { transform: none; }
+  .opt-key { width: 28px; height: 28px; font-size: 12px; }
+  .opt-label { font-size: 13px; }
+  .opt-sub { font-size: 11px; }
+
+  /* Bouton suivant — sticky bottom sur mobile */
+  .q-nav-row {
+    position: sticky;
+    bottom: 0;
+    background: var(--white);
+    border-top: 1px solid var(--gray-200);
+    padding: 14px 20px;
+    margin: 0 -20px;
+    z-index: 10;
+    box-shadow: 0 -8px 24px rgba(0,0,0,0.06);
+  }
+  .btn-next {
+    width: 100%;
+    justify-content: center;
+    padding: 15px 20px;
+    font-size: 14px;
+    border-radius: 6px;
+  }
+  .tension-dots { display: none !important; }
+
+  /* ── SCREEN 2 — GATE ── */
+  #screen-2 { padding: 88px 20px 60px; align-items: flex-start; }
   .gate-inner { width: 100%; }
-  .gate-score-preview { flex-direction: row; align-items: center; padding: 18px 20px; gap: 16px; margin-bottom: 28px; }
-  .gate-score-blur { font-size: 44px; }
+  .gate-score-preview {
+    flex-direction: row;
+    align-items: center;
+    padding: 18px 20px;
+    gap: 16px;
+    margin-bottom: 24px;
+    border-radius: 10px;
+  }
+  .gate-score-blur { font-size: 48px; }
   .gate-score-text { font-size: 13px; }
-  .gate-score-text strong { font-size: 14px; }
-  .gate-title { font-size: clamp(22px, 7vw, 32px); margin-bottom: 12px; }
-  .gate-sub { font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
+  .gate-score-text strong { font-size: 15px; }
+  .gate-title { font-size: clamp(24px, 7vw, 34px); margin-bottom: 10px; }
+  .gate-sub { font-size: 14px; line-height: 1.6; margin-bottom: 22px; }
   .form-row { grid-template-columns: 1fr; gap: 0; }
-  .form-input { padding: 14px 16px; font-size: 16px; border-radius: 8px; }
-  .btn-submit { padding: 16px 20px; font-size: 15px; border-radius: 8px; }
+  .form-input { padding: 14px 16px; font-size: 16px; }
+  .btn-submit { padding: 16px 20px; font-size: 15px; }
   .form-note { font-size: 11px; }
 
-  /* LOADING */
-  #screen-3 { padding: 28px 20px; min-height: 100vh; }
-  .load-steps { min-width: auto; width: 100%; max-width: 320px; }
+  /* ── SCREEN 3 — LOADING ── */
+  #screen-3 { padding: 24px 20px; }
+  .load-score-count { font-size: min(40vw, 220px); }
+  .load-steps { min-width: auto; width: 100%; max-width: 300px; }
   .load-step { gap: 12px; }
   .load-step-text { font-size: 13px; }
 
-  /* RÉSULTATS */
-  #screen-4 { padding-top: 70px; }
-  .res-hero { padding: 40px 20px 44px; }
+  /* ── SCREEN 4 — RÉSULTATS ── */
+  #screen-4 { padding-top: 68px; }
+  .res-hero { padding: 36px 20px 40px; }
   .res-hero-bg { display: none; }
-  .res-hero-inner { gap: 20px; text-align: center; }
+  .res-hero-inner {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+    text-align: center !important;
+  }
+  .res-verdict-eyebrow { justify-content: center !important; }
+  .res-verdict-body { margin: 0 auto; }
   .score-ring-wrap { width: 120px; height: 120px; margin: 0 auto; }
   .score-num-big { font-size: 38px; }
-  .res-verdict-title { font-size: clamp(20px, 6.5vw, 30px); }
+  .res-verdict-title { font-size: clamp(20px, 6vw, 28px); }
   .res-verdict-body { font-size: 14px; }
-  .res-body { grid-template-columns: 1fr !important; padding: 24px 20px 40px; gap: 16px; }
-  .diag-section-title { font-size: 10px; }
+
+  .res-body {
+    grid-template-columns: 1fr !important;
+    padding: 24px 20px 48px !important;
+    gap: 16px !important;
+  }
+  .diag-section-title { font-size: 10px; margin-bottom: 14px; }
   .diag-card { padding: 14px 16px; gap: 12px; }
-  .diag-card-icon { width: 28px; height: 28px; font-size: 12px; }
+  .diag-card-icon { width: 30px; height: 30px; font-size: 13px; }
   .diag-card-name { font-size: 13px; }
   .diag-card-desc { font-size: 12px; line-height: 1.5; }
-  .res-cta { padding: 28px 20px; gap: 20px; border-radius: 10px; flex-direction: column; }
-  .res-cta-title { font-size: clamp(20px, 6vw, 28px); }
+  .diag-card-bar { margin-top: 10px; }
+
+  .res-cta {
+    grid-column: 1 / -1;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 28px 20px !important;
+    border-radius: 10px;
+    gap: 20px;
+  }
+  .res-cta-title { font-size: clamp(20px, 6vw, 26px); }
   .res-cta-sub { font-size: 13px; }
   .res-cta-action { width: 100%; }
   .res-cta-action .btn-primary { width: 100%; justify-content: center; }
-  .res-guarantee { font-size: 11px; text-align: center; }
   .res-cta-price { font-size: 11px; }
 }
 
@@ -621,9 +822,7 @@ h1.hero-title .line-accent {
   position: sticky; top: 0; height: 100vh;
   overflow: hidden;
 }
-@media (max-width: 1000px) {
-  .q-left { position: relative !important; height: auto !important; overflow: visible !important; }
-}
+/* q-left responsive handled in main breakpoints */
 
 .q-left-bg-num {
   position: absolute;
@@ -690,6 +889,16 @@ h1.hero-title .line-accent {
   justify-content: center;
   position: relative;
   overflow: hidden;
+  background: var(--white);
+}
+/* Accent vert discret en haut du panneau droit questions */
+.q-right::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 .options-wrap {
@@ -948,6 +1157,7 @@ h1.hero-title .line-accent {
   padding: 48px;
   position: relative;
   overflow: hidden;
+  border-top: 3px solid var(--green);
 }
 
 .load-score-count {
@@ -1107,6 +1317,9 @@ h1.hero-title .line-accent {
 .diag-card-icon.red { background: rgba(220,60,60,0.1); color: #DC3C3C; }
 .diag-card-icon.yellow { background: rgba(240,185,11,0.1); color: #D4A10D; }
 .diag-card-icon.green { background: var(--green-dim); color: var(--green); }
+.diag-card:has(.diag-card-icon.green) { border-left: 3px solid var(--green); }
+.diag-card:has(.diag-card-icon.red)   { border-left: 3px solid #DC3C3C; }
+.diag-card:has(.diag-card-icon.yellow){ border-left: 3px solid #F0B90B; }
 
 .diag-card-name { font-size: 14px; font-weight: 600; color: var(--black); margin-bottom: 3px; }
 .diag-card-desc { font-size: 13px; color: var(--gray-600); line-height: 1.5; font-weight: 300; }
@@ -1248,6 +1461,22 @@ h1.hero-title .line-accent {
     </div>
   </div>
 
+  <!-- MOBILE/TABLET COLOR BAND — remplace le panel droit -->
+  <div class="hero-color-band" id="hero-color-band">
+    <div class="hero-color-band-item">
+      <div class="hero-color-band-num"><span>87</span>%</div>
+      <div class="hero-color-band-label">setups avec une faille critique</div>
+    </div>
+    <div class="hero-color-band-item">
+      <div class="hero-color-band-num">21<span>j</span></div>
+      <div class="hero-color-band-label">pour une infra qui délivre</div>
+    </div>
+    <div class="hero-color-band-item">
+      <div class="hero-color-band-num">J+<span>45</span></div>
+      <div class="hero-color-band-label">premiers RDV garantis</div>
+    </div>
+  </div>
+
   <!-- RIGHT — Alert feed -->
   <div class="hero-right">
     <div class="hero-right-label">
@@ -1318,6 +1547,10 @@ h1.hero-title .line-accent {
       </div>
     </div>
     <div class="success-banner" id="success-banner">✓ Parfait, génération du diagnostic en cours…</div>
+    <div class="gate-color-accent">
+      <div class="gate-color-accent-text">Diagnostic personnalisé</div>
+      <div class="gate-color-accent-bar"></div>
+    </div>
     <h2 class="gate-title">Où envoyer<br><em>vos résultats ?</em></h2>
     <p class="gate-sub">Votre diagnostic personnalisé + les recommandations prioritaires. En clair, sans jargon.</p>
     <div class="form-row">
@@ -1347,6 +1580,10 @@ h1.hero-title .line-accent {
 <div class="screen" id="screen-3">
   <div class="load-score-count" id="load-count">0</div>
   <div class="load-inner">
+    <div style="margin-bottom:28px;text-align:left;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:6px;">Konverti · Analyse en cours</div>
+      <div style="width:40px;height:2px;background:var(--green);border-radius:2px;"></div>
+    </div>
     <div class="load-steps">
       <div class="load-step" id="ls-1"><div class="load-step-dot"></div><span class="load-step-text">Analyse de la configuration DNS</span></div>
       <div class="load-step" id="ls-2"><div class="load-step-dot"></div><span class="load-step-text">Évaluation de la délivrabilité</span></div>
@@ -1379,6 +1616,8 @@ h1.hero-title .line-accent {
     </div>
   </div>
 
+  <!-- Color accent bar under results hero -->
+  <div style="height:4px;background:linear-gradient(90deg,var(--green) 0%,var(--black) 60%,transparent 100%);"></div>
   <div class="res-body">
     <div id="res-critical-section">
       <div class="diag-section-title" id="res-critical-label">Points à corriger</div>
@@ -1422,28 +1661,127 @@ document.querySelectorAll('button, a, .option, input').forEach(el => {
 
 // ── DATA
 const questions = [
-  { cat:"Infrastructure technique", text:"Avez-vous configuré SPF, DKIM et DMARC sur votre domaine d'envoi ?", hint:"Ces 3 protocoles authentifient vos emails. Sans eux, la majorité atterrissent en spam dès le départ.",
-    opts:[{k:"A",l:"Oui, les 3 sont configurés et vérifiés",s:"Configuration complète",score:10},{k:"B",l:"Partiellement (1 ou 2 sur 3)",s:"Configuration incomplète",score:5},{k:"C",l:"Non, je ne sais pas ce que c'est",s:"Risque élevé",score:0},{k:"D",l:"Je prospecte depuis mon domaine principal",s:"Risque critique",score:0}]},
-  { cat:"Infrastructure technique", text:"Utilisez-vous un domaine secondaire dédié à la prospection ?", hint:"Ex : team-monentreprise.com. Cela protège votre domaine principal d'un éventuel blacklistage.",
-    opts:[{k:"A",l:"Oui, domaine(s) dédié(s) configurés",s:"Bonne pratique",score:10},{k:"B",l:"Non, j'envoie depuis mon domaine principal",s:"Votre réputation est exposée",score:0},{k:"C",l:"Je ne prospecte pas encore par email",s:"",score:5}]},
-  { cat:"Délivrabilité", text:"Avez-vous effectué un warm-up complet avant d'envoyer vos campagnes ?", hint:"Le warm-up consiste à envoyer progressivement pendant 21 jours pour construire une réputation d'envoi.",
-    opts:[{k:"A",l:"Warm-up complet (21+ jours)",s:"Délivrabilité optimale",score:10},{k:"B",l:"Warm-up partiel (moins de 2 semaines)",s:"Risque modéré",score:4},{k:"C",l:"Non, j'ai envoyé directement",s:"Probable blacklistage",score:0},{k:"D",l:"Je ne savais pas que c'était nécessaire",s:"Point critique",score:0}]},
-  { cat:"Délivrabilité", text:"Quel est votre taux d'ouverture actuel sur vos campagnes cold email ?", hint:"Un taux sain se situe entre 35 % et 55 % pour une infrastructure bien configurée.",
-    opts:[{k:"A",l:"50 % ou plus",s:"Infrastructure excellente",score:10},{k:"B",l:"30 % à 50 %",s:"Résultats corrects",score:7},{k:"C",l:"10 % à 30 %",s:"Problème de délivrabilité",score:3},{k:"D",l:"Moins de 10 % ou je ne mesure pas",s:"Emails probablement en spam",score:0}]},
-  { cat:"Copywriting", text:"Comment personnalisez-vous vos emails de prospection ?", hint:"La personnalisation va au-delà du prénom. Elle touche le contexte spécifique de chaque prospect.",
-    opts:[{k:"A",l:"Icebreaker unique basé sur leur site/actualité/LinkedIn",s:"Forte personnalisation",score:10},{k:"B",l:"Prénom + nom de l'entreprise uniquement",s:"Personnalisation minimale",score:4},{k:"C",l:"Template identique pour tous",s:"Faible taux de réponse",score:1},{k:"D",l:"Je n'envoie pas encore",s:"",score:5}]},
-  { cat:"Copywriting", text:"Quelle est la longueur habituelle de vos emails de prospection ?", hint:"Les emails courts (50-80 mots) surperforment systématiquement les emails longs en cold B2B.",
-    opts:[{k:"A",l:"Court et direct, 50 à 80 mots",s:"Format optimal",score:10},{k:"B",l:"Moyen, 100 à 150 mots",s:"Acceptable",score:6},{k:"C",l:"Long, 200 mots et plus",s:"Taux de lecture faible",score:2},{k:"D",l:"Variable sans stratégie définie",s:"",score:1}]},
-  { cat:"Copywriting", text:"Quel est le CTA de votre premier email de prospection ?", hint:"Le premier email doit déclencher une conversation, jamais conclure une vente.",
-    opts:[{k:"A",l:"Une question simple qui invite à répondre",s:"Approche conversationnelle",score:10},{k:"B",l:"Un lien vers mon Calendly ou agenda",s:"Efficace mais froid",score:6},{k:"C",l:"Une présentation de mon offre complète",s:"Trop commercial en 1er contact",score:2},{k:"D",l:"Pas de CTA clairement défini",s:"",score:0}]},
-  { cat:"Séquences", text:"Combien de relances envoyez-vous après le premier email ?", hint:"80 % des réponses en cold email arrivent après la 2e ou 3e relance.",
-    opts:[{k:"A",l:"4 à 6 relances espacées sur 3 semaines",s:"Séquence optimale",score:10},{k:"B",l:"2 à 3 relances",s:"Correct mais optimisable",score:6},{k:"C",l:"1 seule relance",s:"Vous laissez des leads sur la table",score:3},{k:"D",l:"Aucune relance",s:"Vous perdez 80 % des opportunités",score:0}]},
-  { cat:"Ciblage", text:"Comment constituez-vous vos listes de prospects ?", hint:"La qualité des données impacte directement le taux de réponse et la délivrabilité.",
-    opts:[{k:"A",l:"Enrichissement automatisé (Clay, Apollo) avec vérification",s:"Données qualifiées",score:10},{k:"B",l:"Extraction manuelle LinkedIn / Sales Nav",s:"Correct mais chronophage",score:7},{k:"C",l:"Achat de liste ou base générique",s:"Risque spam + mauvaise qualité",score:1},{k:"D",l:"Pas de liste structurée",s:"Prospection non scalable",score:0}]},
-  { cat:"Volume", text:"Combien d'emails envoyez-vous par mois en prospection ?", hint:"Un volume sain : 500 à 2 000 emails/mois sur une infrastructure dédiée bien chauffée.",
-    opts:[{k:"A",l:"500 à 2 000 emails par mois",s:"Volume sain et scalable",score:10},{k:"B",l:"Moins de 500",s:"Sous-exploité",score:5},{k:"C",l:"Plus de 2 000 sans précautions techniques",s:"Risque de blacklistage",score:3},{k:"D",l:"Je ne prospecte pas encore",s:"",score:5}]},
-  { cat:"Résultats", text:"Quel est votre taux de réponse moyen sur vos campagnes ?", hint:"Un bon taux de réponse en cold email B2B se situe entre 3 % et 8 %.",
-    opts:[{k:"A",l:"5 % ou plus",s:"Très bonne performance",score:10},{k:"B",l:"2 % à 5 %",s:"Performance correcte",score:7},{k:"C",l:"0,5 % à 2 %",s:"Marge d'amélioration importante",score:3},{k:"D",l:"Moins de 0,5 % ou non mesuré",s:"Optimisation urgente nécessaire",score:0}]}
+  {
+    cat: "Infrastructure technique",
+    text: "Combien de domaines d'envoi dédiés utilisez-vous pour prospecter ?",
+    hint: "La règle d'or : 1 domaine = max 3 boîtes = max 120 emails/jour. En dessous de 3 domaines pour tout volume sérieux, vous saturez les limites d'envoi et exposez votre réputation. Un domaine dédié coûte 10€/an — ne pas en avoir est l'erreur la plus chère du cold email.",
+    opts: [
+      {k:"A", l:"3 domaines ou plus, tous séparés du domaine principal", s:"Infrastructure scalable et sécurisée", score:10},
+      {k:"B", l:"1 ou 2 domaines dédiés configurés", s:"Solide mais volume limité à 240 emails/jour max", score:6},
+      {k:"C", l:"J'envoie depuis mon domaine principal (ex : @monentreprise.com)", s:"Votre réputation commerciale entière est exposée", score:0},
+      {k:"D", l:"Je n'ai pas encore de domaine dédié à la prospection", s:"Faille bloquante — priorité absolue avant tout envoi", score:0}
+    ]
+  },
+  {
+    cat: "Infrastructure technique",
+    text: "Quel est le statut de votre enregistrement DMARC ?",
+    hint: "Depuis février 2024, Google et Yahoo exigent un DMARC actif pour tout envoi en masse (500+ emails/jour). Un DMARC en mode 'none' ne protège rien et ne satisfait pas ces nouvelles exigences. En mode 'reject', vous bloquez toute usurpation de votre domaine et vous conformez aux standards.",
+    opts: [
+      {k:"A", l:"p=reject — vérification complète, protection maximale active", s:"Conformité Gmail/Yahoo 2024 respectée", score:10},
+      {k:"B", l:"p=quarantine — les emails suspects vont en spam plutôt qu'être rejetés", s:"Acceptable, migration vers reject recommandée", score:6},
+      {k:"C", l:"p=none — surveillance uniquement, aucune protection réelle", s:"Non conforme aux exigences 2024, à corriger", score:2},
+      {k:"D", l:"Pas de DMARC configuré ou je ne sais pas ce que c'est", s:"Votre domaine peut être usurpé et vos envois rejetés en bloc", score:0}
+    ]
+  },
+  {
+    cat: "Délivrabilité",
+    text: "Comment avez-vous chauffé vos boîtes mail avant d'envoyer ?",
+    hint: "Une boîte neuve n'a aucune réputation d'envoi. Les serveurs de réception la traitent comme suspecte. Le warm-up (21 jours minimum via Instantly, Lemwarm ou Mailreach) construit progressivement cette réputation par des échanges simulés. Sans ça, 60% à 80% de vos emails finissent en spam dès la première semaine.",
+    opts: [
+      {k:"A", l:"Warm-up automatisé sur Instantly / Lemwarm / Mailreach — 21 jours minimum", s:"Process maîtrisé, réputation construite correctement", score:10},
+      {k:"B", l:"Warm-up manuel ou partiel (moins de 2 semaines)", s:"Insuffisant pour une délivrabilité stable sur la durée", score:3},
+      {k:"C", l:"Aucun warm-up, j'ai envoyé directement après création", s:"Vos boîtes sont probablement marquées — les résultats le montrent", score:0},
+      {k:"D", l:"Je n'ai pas encore commencé à envoyer", s:"Démarrez le warm-up maintenant, avant le premier envoi", score:5}
+    ]
+  },
+  {
+    cat: "Délivrabilité",
+    text: "Avez-vous testé votre score de délivrabilité avec un outil dédié ?",
+    hint: "Mail-Tester, GlockApps et Mailreach permettent de vérifier si vos emails atteignent l'inbox avant de lancer une campagne. Un score en dessous de 8/10 signifie qu'une partie significative de vos envois n'est jamais vue. C'est le test que la plupart des équipes ne font jamais — et qui explique pourquoi leurs campagnes 'ne fonctionnent pas'.",
+    opts: [
+      {k:"A", l:"Oui, score 9/10 ou plus — testé régulièrement avant chaque campagne", s:"Délivrabilité vérifiée, vous partez avec un avantage réel", score:10},
+      {k:"B", l:"Oui, score entre 6 et 8 — axes d'amélioration identifiés", s:"Base correcte, des optimisations DNS à appliquer", score:5},
+      {k:"C", l:"Non, je n'ai jamais testé ma délivrabilité", s:"Vous envoyez sans savoir ce qui arrive vraiment en inbox", score:0},
+      {k:"D", l:"Je ne connaissais pas ces outils", s:"Diagnostic de délivrabilité manquant — test en 5 minutes sur mail-tester.com", score:0}
+    ]
+  },
+  {
+    cat: "Ciblage",
+    text: "Comment vérifiez-vous la validité des adresses email avant d'envoyer ?",
+    hint: "Un taux de bounce supérieur à 3% suffit pour déclencher les filtres anti-spam et dégrader durablement la réputation de votre domaine. Sans vérification systématique (Million Verifier, NeverBounce, ZeroBounce), chaque campagne abîme votre infrastructure. C'est une dégradation silencieuse : vous ne le voyez pas, mais les résultats baissent semaine après semaine.",
+    opts: [
+      {k:"A", l:"Vérification systématique via Million Verifier, NeverBounce ou ZeroBounce", s:"Taux de bounce sous contrôle, réputation préservée", score:10},
+      {k:"B", l:"Vérification ponctuelle ou partielle sur certaines listes", s:"Risque résiduel — des bounces silencieux dégradent votre score", score:5},
+      {k:"C", l:"J'envoie sans vérifier les adresses au préalable", s:"Votre réputation d'envoi se dégrade à chaque campagne", score:0},
+      {k:"D", l:"Je n'avais pas identifié ça comme un enjeu", s:"Point critique — à intégrer avant la prochaine campagne", score:0}
+    ]
+  },
+  {
+    cat: "Copywriting",
+    text: "Quelle est la structure de votre email de prospection type ?",
+    hint: "La structure qui convertit en B2B : 1 icebreaker contextuel (10-15 mots sur leur actualité ou site) + 1 problème précis + 1 résultat concret avec chiffre + 1 seule question de qualification. Pas de présentation d'entreprise, pas de pitch d'offre, pas de prix. Le premier email ouvre une conversation — il ne la conclut pas.",
+    opts: [
+      {k:"A", l:"Icebreaker contextuel + problème identifié + résultat chiffré + question courte", s:"Structure haute conversion — taux de réponse 4-8% atteignable", score:10},
+      {k:"B", l:"Présentation de mon entreprise + description de l'offre + lien Calendly", s:"Trop commercial pour un premier contact froid — taux de réponse < 1%", score:2},
+      {k:"C", l:"Template personnalisé avec prénom et nom d'entreprise uniquement", s:"Fausse personnalisation — supprimé en 3 secondes", score:1},
+      {k:"D", l:"Pas de structure définie, je rédige au cas par cas", s:"Résultats imprévisibles, non scalable", score:0}
+    ]
+  },
+  {
+    cat: "Copywriting",
+    text: "Comment générez-vous vos icebreakers personnalisés à grande échelle ?",
+    hint: "Un icebreaker efficace cite une information réelle et spécifique : une actualité LinkedIn récente, un recrutement en cours, un contenu publié, une technologie visible sur leur site. Il prouve que vous avez regardé leur situation. L'automatisation via Clay, n8n ou un process IA permet de le faire sur 500 prospects avec la même qualité qu'un email rédigé manuellement.",
+    opts: [
+      {k:"A", l:"Automatisation via Clay, n8n ou un process IA sur données scrapées", s:"Personnalisation à grande échelle — le meilleur levier ROI en 2024", score:10},
+      {k:"B", l:"Rédaction manuelle pour chaque prospect, basée sur leur profil LinkedIn ou site", s:"Qualité élevée mais non scalable au-delà de 50 emails/semaine", score:7},
+      {k:"C", l:"Champ variable basique : prénom, poste, nom d'entreprise", s:"Ce n'est plus de la personnalisation — tout le monde le fait", score:2},
+      {k:"D", l:"Même introduction pour tous les prospects", s:"Taux de réponse entre 0,2% et 0,8% dans le meilleur des cas", score:0}
+    ]
+  },
+  {
+    cat: "Séquences",
+    text: "Quelle est la structure de votre séquence complète après le premier email ?",
+    hint: "80% des réponses cold email arrivent après la 2e ou 3e relance. Une séquence efficace : J0 (email principal) + J3 (angle valeur ajoutée différent) + J8 (preuve sociale ou cas client) + J15 (breakup email court et direct). Chaque relance doit apporter un élément nouveau — pas juste 'suite à mon précédent message'.",
+    opts: [
+      {k:"A", l:"4 à 6 emails sur 3 semaines, chaque relance avec un angle et contenu distincts", s:"Séquence professionnelle — vous captez les 80% qui répondent tard", score:10},
+      {k:"B", l:"2 à 3 relances, mais souvent les mêmes arguments reformulés", s:"Volume correct, contenu à restructurer pour maximiser les retours", score:5},
+      {k:"C", l:"1 seule relance du type 'je reviens vers vous'", s:"Vous abandonnez avant que 80% des prospects aient répondu", score:2},
+      {k:"D", l:"Aucune relance après le premier email", s:"Vous laissez 4 prospects sur 5 sans suite — argent jeté par les fenêtres", score:0}
+    ]
+  },
+  {
+    cat: "Ciblage",
+    text: "Quelle est la précision de votre segmentation par campagne ?",
+    hint: "Un segment gagnant se définit par : secteur précis + taille d'entreprise + poste décisionnaire + déclencheur contextuel (recrutement actif, levée de fonds, nouveau produit, expansion géographique). Plus le segment est précis, plus le message résonne. 200 prospects hyper-ciblés > 2 000 prospects génériques en termes de RDV générés.",
+    opts: [
+      {k:"A", l:"Segment ultra-précis avec déclencheur contextuel identifié pour chaque liste", s:"Taux de réponse 5-12% atteignable — c'est là que se fait la différence", score:10},
+      {k:"B", l:"Secteur + taille d'entreprise + poste, sans déclencheur spécifique", s:"Solide, peut encore s'affiner pour doubler les résultats", score:7},
+      {k:"C", l:"Ciblage par secteur uniquement, message identique pour tous", s:"Trop générique — le message ne résonne pas assez", score:3},
+      {k:"D", l:"Pas de segmentation définie, je prospecte large", s:"Taux de réponse inférieur à 1% garanti sur la durée", score:0}
+    ]
+  },
+  {
+    cat: "Pilotage",
+    text: "Quelles métriques suivez-vous pour piloter vos campagnes ?",
+    hint: "Les métriques qui comptent vraiment : taux d'ouverture (objectif 40%+), taux de réponse positive (objectif 3%+), taux de bounce (alerte dès 3%), taux de désabonnement. Sans tableau de bord structuré, vous ne savez pas ce qui fonctionne, vous ne pouvez pas A/B tester, et vous optimisez à l'instinct — ce qui ne scale pas.",
+    opts: [
+      {k:"A", l:"Dashboard complet : opens, réponses positives/négatives, bounces, unsubscribes — par campagne et par segment", s:"Pilotage data-driven — vous itérez vite et vous améliorez en continu", score:10},
+      {k:"B", l:"Je suis le taux d'ouverture et le nombre de réponses reçues", s:"Minimum viable — vous manquez les signaux faibles (bounce, désabonnement)", score:6},
+      {k:"C", l:"Je regarde les réponses qui arrivent, c'est tout", s:"Vous ne voyez pas les problèmes de délivrabilité se former", score:2},
+      {k:"D", l:"Aucun suivi structuré de mes campagnes", s:"Impossible d'optimiser sans données — vous répétez les mêmes erreurs", score:0}
+    ]
+  },
+  {
+    cat: "Résultats",
+    text: "Quel est votre taux de réponse positive sur les 30 derniers jours ?",
+    hint: "En dessous de 1% : le problème est dans l'infrastructure ou le ciblage — pas dans le copywriting. Entre 1% et 3% : la base est là, l'icebreaker et la séquence sont à optimiser. Au-dessus de 3% : vous avez une machine qui fonctionne, l'enjeu est de scaler le volume. Au-dessus de 5% : vous êtes dans le top 5% des setups cold email B2B.",
+    opts: [
+      {k:"A", l:"5% ou plus — plusieurs RDV qualifiés par semaine en régime de croisière", s:"Machine opérationnelle — l'enjeu est maintenant de scaler", score:10},
+      {k:"B", l:"2% à 5% — quelques RDV par mois, résultats encourageants", s:"Base solide — des optimisations ciblées peuvent doubler ce chiffre", score:7},
+      {k:"C", l:"0,5% à 2% — très peu de retours malgré les envois", s:"Problème identifiable et correctible — infrastructure ou ciblage en cause", score:3},
+      {k:"D", l:"Moins de 0,5% ou je ne mesure pas précisément", s:"Investissement sans retour mesurable — les failles sont en amont", score:0}
+    ]
+  }
 ];
 
 // ── STATE
@@ -1665,44 +2003,122 @@ function showResults() {
 
   // Diagnostic
   const diagData=[
-    {check:()=>answers[0]!==null&&questions[0].opts[answers[0]].score<7, sev:'red', icon:'!',
-      label:'Vos emails ne sont pas authentifiés',
-      desc:'Sans SPF, DKIM et DMARC complets, Gmail et Outlook ne peuvent pas vérifier que c\'est bien vous qui envoyez. Résultat : spam direct, sans appel. Vos prospects ne verront jamais votre message.', pct:12},
-    {check:()=>answers[1]!==null&&questions[1].opts[answers[1]].score<7, sev:'red', icon:'!',
-      label:'Votre domaine principal est en danger',
-      desc:'Un seul prospect qui clique "spam" depuis votre domaine principal peut détruire en 48h la délivrabilité de toute votre communication. Devis, factures, emails clients inclus. Ce risque n\'est pas théorique.', pct:8},
-    {check:()=>answers[2]!==null&&questions[2].opts[answers[2]].score<5, sev:'red', icon:'!',
-      label:'Vos boîtes sont grillées avant même d\'envoyer',
-      desc:'Une boîte email neuve qui envoie des centaines de messages dès le départ est perçue comme un compte de spam. Les filtres la blacklistent automatiquement. Le warm-up n\'est pas une option, c\'est un prérequis.', pct:15},
-    {check:()=>answers[3]!==null&&questions[3].opts[answers[3]].score<5, sev:'red', icon:'!',
-      label:'La majorité de vos emails n\'arrivent pas en inbox',
-      desc:'En dessous de 30% d\'ouverture, vous n\'avez pas un problème de copywriting. Vous avez un problème d\'infrastructure. Écrire de meilleurs emails ne servira à rien tant que la délivrabilité n\'est pas réglée.', pct:18},
-    {check:()=>answers[4]!==null&&questions[4].opts[answers[4]].score<7, sev:'yellow', icon:'◆',
-      label:'Votre email ressemble à tous les autres',
-      desc:'Le prospect reçoit 30 à 50 emails de prospection par semaine. Si le vôtre commence par son prénom et le nom de son entreprise, il est supprimé en moins de 2 secondes, souvent avant d\'être ouvert.', pct:46},
-    {check:()=>answers[5]!==null&&questions[5].opts[answers[5]].score<6, sev:'yellow', icon:'◆',
-      label:'Personne ne lit vos emails jusqu\'au bout',
-      desc:'Un dirigeant lit ses emails sur mobile, entre deux réunions. Au-delà de 80 mots, il arrête. Chaque phrase en trop est une raison de ne pas répondre. Votre offre, aussi bonne soit-elle, reste invisible.', pct:44},
-    {check:()=>answers[6]!==null&&questions[6].opts[answers[6]].score<6, sev:'yellow', icon:'◆',
-      label:'Votre CTA ferme la conversation avant qu\'elle commence',
-      desc:'Proposer un rendez-vous de 30 minutes à un inconnu en premier email, c\'est demander un mariage au premier regard. La réponse est non, par réflexe. Le bon CTA pose une question, pas un agenda.', pct:42},
-    {check:()=>answers[7]!==null&&questions[7].opts[answers[7]].score<6, sev:'yellow', icon:'◆',
-      label:'Vous abandonnez juste avant la réponse',
-      desc:'Les données sont claires : 80% des réponses cold email arrivent à partir de la 3e relance. Si vous arrêtez avant, vous avez fait tout le travail d\'infrastructure pour récolter moins d\'un tiers des résultats possibles.', pct:50},
-    {check:()=>answers[8]!==null&&questions[8].opts[answers[8]].score>=7, sev:'green', icon:'✓',
-      label:'Données prospects : base saine',
-      desc:'Vos listes sont construites avec méthode et vérifiées. C\'est le fondement que beaucoup oublient. Vous l\'avez bien posé.', pct:88},
-    {check:()=>answers[0]!==null&&questions[0].opts[answers[0]].score>=8, sev:'green', icon:'✓',
-      label:'DNS correctement configurés',
-      desc:'SPF, DKIM, DMARC en place et vérifiés. Vos emails ont une identité reconnue par les serveurs de réception. Première brique essentielle bien posée.', pct:92},
-    {check:()=>answers[2]!==null&&questions[2].opts[answers[2]].score>=8, sev:'green', icon:'✓',
-      label:'Warm-up effectué correctement',
-      desc:'21 jours de chauffe progressive réalisés. Vos boîtes ont une réputation d\'envoi construite. Vous partez sur une base solide.', pct:90},
-    {check:()=>answers[1]!==null&&questions[1].opts[answers[1]].score>=8, sev:'green', icon:'✓',
-      label:'Domaine principal protégé',
-      desc:'Votre domaine de prospection est séparé de votre domaine principal. Aucun risque de contamination croisée en cas de signalement.', pct:86},
+    // ── ROUGE : failles critiques
+    {
+      check:()=>answers[0]!==null&&questions[0].opts[answers[0]].score<6,
+      sev:'red', icon:'!',
+      label:'Infrastructure sous-dimensionnée : vous plafonnez avant même de commencer',
+      desc:'Avec 1 ou 2 domaines (ou pire, votre domaine principal), vous êtes limité à 60-120 emails/jour avant de saturer les filtres. C'est insuffisant pour générer un flux de RDV prévisible. Chaque domaine dédié supplémentaire multiplie votre capacité sans risque — à 10€/an, c'est le meilleur investissement du cold email.',
+      pct:14
+    },
+    {
+      check:()=>answers[1]!==null&&questions[1].opts[answers[1]].score<5,
+      sev:'red', icon:'!',
+      label:'DMARC insuffisant : vous n'êtes pas conformes aux exigences Gmail/Yahoo 2024',
+      desc:'Depuis février 2024, Google et Yahoo filtrent ou rejettent les envois en masse dont le DMARC n'est pas en mode "quarantine" ou "reject". Si le vôtre est en "none", des milliers de vos emails partent dans le vide — sans que votre outil d'envoi vous le signale. C'est souvent la cause principale d'un taux d'ouverture qui s'effondre sans explication apparente.',
+      pct:11
+    },
+    {
+      check:()=>answers[2]!==null&&questions[2].opts[answers[2]].score<5,
+      sev:'red', icon:'!',
+      label:'Warm-up absent ou bâclé : vos boîtes sont déjà compromises',
+      desc:'Sans warm-up structuré sur un outil comme Instantly ou Lemwarm, vos boîtes n'ont aucune réputation d'envoi. Les filtres les classent comme sources à risque dès les premiers envois. Ce n'est souvent pas récupérable sur les boîtes existantes : il faut recréer, reconfigurer, et recommencer 21 jours de chauffe. Ce délai coûte des semaines de pipeline.',
+      pct:16
+    },
+    {
+      check:()=>answers[3]!==null&&questions[3].opts[answers[3]].score<5,
+      sev:'red', icon:'!',
+      label:'Délivrabilité non vérifiée : vous optimisez le mauvais problème',
+      desc:'Sans test préalable sur Mail-Tester ou GlockApps, vous ne savez pas si vos emails arrivent en inbox, en promotions ou en spam. Un score en dessous de 8/10 explique à lui seul la majorité des mauvais résultats. Réécrire vos emails ou changer vos séquences ne changera rien — le problème est en amont, au niveau de l'infrastructure.',
+      pct:13
+    },
+    {
+      check:()=>answers[4]!==null&&questions[4].opts[answers[4]].score<5,
+      sev:'red', icon:'!',
+      label:'Bounces non maîtrisés : dégradation silencieuse de votre réputation',
+      desc:'Au-dessus de 3% de bounce, les serveurs de réception abaissent progressivement votre score d'envoi. La dégradation est silencieuse : vos emails sont envoyés, votre outil marque "délivré", mais de moins en moins atteignent l'inbox. Sans vérification systématique des adresses (Million Verifier, NeverBounce), chaque campagne accélère ce processus.',
+      pct:9
+    },
+    // ── JAUNE : optimisations copywriting / séquences / ciblage
+    {
+      check:()=>answers[5]!==null&&questions[5].opts[answers[5]].score<6,
+      sev:'yellow', icon:'◆',
+      label:'Structure d'email : vous pitchez là où il faut qualifier',
+      desc:'Le premier email froid n'est pas fait pour vendre — il est fait pour identifier si le prospect a le problème que vous résolvez. Une structure "présentation + offre + Calendly" génère moins de 1% de réponse positive en 2024. La structure "icebreaker contextuel + problème précis + résultat chiffré + question courte" atteint régulièrement 4 à 8% sur un segment bien défini.',
+      pct:43
+    },
+    {
+      check:()=>answers[6]!==null&&questions[6].opts[answers[6]].score<6,
+      sev:'yellow', icon:'◆',
+      label:'Personnalisation insuffisante : votre email ressemble à ceux que vos prospects ignorent',
+      desc:'Mentionner le prénom et le poste d'un prospect n'est plus de la personnalisation — c'est le minimum attendu depuis 2022. Ce qui déclenche une réponse en 2024, c'est la preuve que vous avez regardé leur situation spécifique : une actualité LinkedIn récente, un recrutement en cours, une phrase de leur site. L'automatisation via Clay ou n8n permet de le faire sur 500 prospects sans effort manuel.',
+      pct:47
+    },
+    {
+      check:()=>answers[7]!==null&&questions[7].opts[answers[7]].score<6,
+      sev:'yellow', icon:'◆',
+      label:'Séquence trop courte : vous abandonnez avant les 80% de réponses',
+      desc:'Les données sont claires sur ce point : 80% des réponses cold email arrivent après la 2e ou 3e relance. Si vous arrêtez après 1 ou 2 emails, vous faites tout le travail d'infrastructure et de ciblage pour récolter moins d'un cinquième des résultats possibles. Une relance efficace ne répète pas le même message — elle introduit un angle nouveau : preuve sociale, cas client, question directe.',
+      pct:51
+    },
+    {
+      check:()=>answers[8]!==null&&questions[8].opts[answers[8]].score<6,
+      sev:'yellow', icon:'◆',
+      label:'Ciblage trop large : votre message ne résonne pas assez',
+      desc:'Un email générique envoyé à "tous les DSI des ESN françaises" génère du volume mais peu de résultats. La logique gagnante en cold B2B est l'hyper-segmentation : un secteur + une taille d'entreprise + un poste décisionnaire + un déclencheur contextuel (recrutement actif, expansion, levée de fonds). Sur 200 prospects hyper-ciblés avec le bon déclencheur, vous obtenez plus de RDV que sur 2 000 prospects génériques.',
+      pct:39
+    },
+    {
+      check:()=>answers[9]!==null&&questions[9].opts[answers[9]].score<6,
+      sev:'yellow', icon:'◆',
+      label:'Pilotage insuffisant : vous répétez les erreurs sans le savoir',
+      desc:'Sans suivi structuré par campagne (opens, réponses positives, bounces, unsubscribes), il est impossible de savoir ce qui fait la différence entre une campagne à 0,8% et une à 6%. Le pilotage par les données est ce qui permet d'itérer vite, d'identifier les séquences qui fonctionnent et de scaler ce qui marche — plutôt que de tout réécrire à chaque fois.',
+      pct:44
+    },
+    // ── VERT : forces identifiées
+    {
+      check:()=>answers[0]!==null&&questions[0].opts[answers[0]].score>=8,
+      sev:'green', icon:'✓',
+      label:'Infrastructure multi-domaines correctement dimensionnée',
+      desc:'Plusieurs domaines dédiés configurés, distincts du domaine principal. Vous pouvez scaler le volume d'envoi sans exposer votre réputation commerciale. C'est la fondation technique que 70% des équipes qui font du cold email n'ont pas encore en place.',
+      pct:91
+    },
+    {
+      check:()=>answers[1]!==null&&questions[1].opts[answers[1]].score>=8,
+      sev:'green', icon:'✓',
+      label:'DMARC en mode reject : conformité 2024 respectée',
+      desc:'Vos domaines sont protégés contre l'usurpation et conformes aux nouvelles exigences de Google et Yahoo. La plupart des équipes ne découvrent cette faille qu'après une chute brutale et inexpliquée de leur délivrabilité. Vous l'avez anticipée.',
+      pct:88
+    },
+    {
+      check:()=>answers[2]!==null&&questions[2].opts[answers[2]].score>=8,
+      sev:'green', icon:'✓',
+      label:'Warm-up outillé et structuré : réputation d'envoi construite correctement',
+      desc:'Vos boîtes ont une réputation construite sur un outil professionnel. Les serveurs de réception les connaissent et leur font confiance. C'est un avantage durable : une fois la réputation établie, elle se maintient avec un warm-up continu en fond.',
+      pct:89
+    },
+    {
+      check:()=>answers[4]!==null&&questions[4].opts[answers[4]].score>=8,
+      sev:'green', icon:'✓',
+      label:'Vérification d'emails intégrée au process : taux de bounce maîtrisé',
+      desc:'Adresses vérifiées avant chaque envoi, taux de bounce sous le seuil critique de 3%. Votre réputation d'envoi se préserve campagne après campagne. C'est une discipline que plus de 60% des équipes qui font du cold email n'appliquent pas — et qui explique leur dégradation progressive.',
+      pct:86
+    },
+    {
+      check:()=>answers[6]!==null&&questions[6].opts[answers[6]].score>=8,
+      sev:'green', icon:'✓',
+      label:'Personnalisation automatisée à grande échelle',
+      desc:'Icebreakers contextuels générés via Clay, n8n ou un process IA. Vous combinez la précision d'un email rédigé manuellement avec la capacité d'un outil d'envoi en masse. C'est le levier de différenciation numéro un en cold B2B aujourd'hui — et vous l'avez déjà.',
+      pct:93
+    },
+    {
+      check:()=>answers[10]!==null&&questions[10].opts[answers[10]].score>=7,
+      sev:'green', icon:'✓',
+      label:'Taux de réponse solide : votre machine fonctionne',
+      desc:'Un taux de réponse positive au-dessus de 2% confirme que les fondations sont solides. Avec les bons ajustements sur la segmentation et les angles de relance, vous avez de la marge pour doubler ce chiffre sans toucher à l'infrastructure.',
+      pct:94
+    },
   ];
-
   const colors={red:'#DC3C3C',yellow:'#F0B90B',green:'#1BDD7F'};
   const crit=[],ok=[];
   diagData.forEach(d=>{
