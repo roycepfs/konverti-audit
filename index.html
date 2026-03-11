@@ -527,13 +527,7 @@ h1.hero-title .line-accent {
   position: relative;
 }
 .hero-color-band-item:last-child { border-right: none; }
-.hero-color-band-item::before {
-  content: '';
-  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 20px; height: 2px;
-  background: var(--green);
-  border-radius: 2px;
-}
+.hero-color-band-item::before { display: none; }
 .hero-color-band-num {
   font-family: var(--mono);
   font-size: 26px; line-height: 1;
